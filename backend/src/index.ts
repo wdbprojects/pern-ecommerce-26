@@ -57,7 +57,7 @@ app.get("/", (req, res) => {
     endpoints: {
       users: "/api/v1/users",
       products: "/api/v1/products",
-      orders: "/api/v1/comments",
+      orders: "/api/v1/orders",
     },
   });
 });
