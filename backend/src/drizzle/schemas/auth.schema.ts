@@ -1,7 +1,10 @@
-import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import { order } from "./order.schema";
 
-export const user = pgTable("user", {
+export type UserRole = "customer" | "support" | "admin";
+
+export const user = pgTable("users", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
@@ -12,10 +15,14 @@ export const user = pgTable("user", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+  role: text("role").$type<UserRole>().notNull().default("customer"),
+  banned: boolean("banned").default(false),
+  banReason: text("ban_reason"),
+  banExpires: timestamp("ban_expires"),
 });
 
 export const session = pgTable(
-  "session",
+  "sessions",
   {
     id: text("id").primaryKey(),
     expiresAt: timestamp("expires_at").notNull(),
@@ -29,12 +36,13 @@ export const session = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
+    impersonatedBy: text("impersonated_by"),
   },
   (table) => [index("session_userId_idx").on(table.userId)],
 );
 
 export const account = pgTable(
-  "account",
+  "accounts",
   {
     id: text("id").primaryKey(),
     accountId: text("account_id").notNull(),
@@ -58,7 +66,7 @@ export const account = pgTable(
 );
 
 export const verification = pgTable(
-  "verification",
+  "verifications",
   {
     id: text("id").primaryKey(),
     identifier: text("identifier").notNull(),
@@ -76,6 +84,7 @@ export const verification = pgTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  orders: many(order),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
