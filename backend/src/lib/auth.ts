@@ -12,6 +12,18 @@ export const auth = betterAuth({
     autoSignIn: true,
     minPasswordLength: 8,
   },
+  baseUrl: "http://localhost:5000",
+  trustedOrigins: ["http://localhost:3000"],
+  cookies: {
+    session: {
+      attributes: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+        path: "/",
+      },
+    },
+  },
   plugins: [
     admin({
       defaultRole: "customer",
