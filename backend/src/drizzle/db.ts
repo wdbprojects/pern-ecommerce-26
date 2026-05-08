@@ -1,8 +1,10 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as schema from "./schema";
-import { ENV } from "../config/env";
+import { getEnv } from "../config/env";
 
-export const db = drizzle(ENV.DATABASE_URL!, { schema: schema });
+const ENV = getEnv();
+
+export const db = drizzle(ENV.DATABASE_URL, { schema: schema });
 
 if (db) {
   console.log("Database connection stablished correctly ☘️");

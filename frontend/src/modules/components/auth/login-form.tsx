@@ -22,7 +22,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, LogIn } from "lucide-react";
-import { loginAction } from "@/_actions/auth-actions";
 import { toast } from "sonner";
 
 const LoginForm = ({ className, ...props }: ComponentProps<"div">) => {
@@ -37,27 +36,28 @@ const LoginForm = ({ className, ...props }: ComponentProps<"div">) => {
   });
   const { handleSubmit, control, reset } = form;
 
-  const onSubmit = async (data: LoginSchemaType) => {
-    const response = await fetch(
-      "http://localhost:5000/api/auth/sign-in/email",
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+  const onSubmit = (data: LoginSchemaType) => {
+    startLoginTransition(async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-in/email`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         },
-        body: JSON.stringify(data),
-      },
-    );
-    const res = await response.json();
-    console.log(res);
-    if (res.success) {
-      toast.success(`${res.message}`);
-      reset();
-      router.push(routes.home);
-    } else {
-      toast.error(res.error || "Error from login form!!");
-    }
+      );
+      const res = await response.json();
+      if (res.success) {
+        toast.success(`${res.message}`);
+        reset();
+        router.push(routes.home);
+      } else {
+        toast.error(res.error || "Error from login form!!");
+      }
+    });
   };
 
   return (

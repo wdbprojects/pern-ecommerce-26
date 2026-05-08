@@ -40,10 +40,10 @@ export const registerAction = async (data: RegisterSchemaType) => {
   }
 };
 
-export const loginAction = async (data: LoginSchemaType) => {
+/* export const loginAction = async (data: LoginSchemaType) => {
   try {
     const response = await fetch(
-      `http://localhost:5000/api/auth/sign-in/email`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-in/email`,
       {
         method: "POST",
         credentials: "include",
@@ -73,4 +73,4 @@ export const loginAction = async (data: LoginSchemaType) => {
     console.error(err.message);
     return { success: false, message: err.message };
   }
-};
+}; */

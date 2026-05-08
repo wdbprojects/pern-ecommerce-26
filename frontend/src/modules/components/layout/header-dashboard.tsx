@@ -1,14 +1,13 @@
 import DarkMode from "@/components/shared/dark-mode";
 import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
 import SignOutButton from "../auth/sign-out-button";
 import AppLogo from "@/components/shared/app-logo";
 import LoginButton from "../auth/login-button";
 import { Badge } from "@/components/ui/badge";
+import { getSession } from "@/lib/auth-utils";
 
 const HeaderDashboard = async () => {
-  const session = await auth.api.getSession({ headers: await headers() });
-
+  const session = await getSession();
   return (
     <header className="bg-background fixed top-0 right-0 z-50 h-auto w-full border-b px-2 py-2">
       <div className="container mx-auto flex w-full items-center justify-between gap-1 sm:gap-2">

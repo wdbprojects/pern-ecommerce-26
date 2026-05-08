@@ -2,6 +2,9 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "../drizzle/db";
 import { admin } from "better-auth/plugins";
+import { getEnv } from "../config/env";
+
+const ENV = getEnv();
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -12,8 +15,8 @@ export const auth = betterAuth({
     autoSignIn: true,
     minPasswordLength: 8,
   },
-  baseUrl: "http://localhost:5000",
-  trustedOrigins: ["http://localhost:3000"],
+  baseUrl: ENV.BASE_URL,
+  trustedOrigins: [ENV.FRONTEND_URL],
   cookies: {
     session: {
       attributes: {

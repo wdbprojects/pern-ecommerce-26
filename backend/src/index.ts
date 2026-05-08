@@ -1,11 +1,12 @@
 import express from "express";
 const app = express();
 import { toNodeHandler, fromNodeHeaders } from "better-auth/node";
-import { setCookieToHeader } from "better-auth/cookies";
-import { ENV } from "./config/env";
 import { auth } from "./lib/auth";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { getEnv } from "./config/env";
+
+const ENV = getEnv();
 
 /* MIDDLEWARES */
 app.use(express.json());
@@ -13,8 +14,8 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "http://localhost:3000",
-    // methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    origin: ENV.FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),
 );
@@ -110,7 +111,6 @@ app.get("/api/me", async (req, res) => {
     if (!session) {
       return res.status(401).json({ error: "No active session!!!" });
     }
-
     return res.json(session);
   } catch (error) {
     console.error(error);

@@ -2,17 +2,42 @@ import { z } from "zod";
 import dotenv from "dotenv";
 dotenv.config({ quiet: true });
 
-export const ENV = {
-  PORT: process.env.PORT,
-  DATABASE_URL: process.env.DATABASE_URL,
-  NODE_ENV: process.env.NODE_ENV,
-  FRONTEND_URL: process.env.FRONTEND_URL,
-  BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
-  SENTRY_DSN: process.env.SENTRY_DSN,
-  STREAM_API_KEY: process.env.STREAM_API_KEY,
-  STREAM_API_SECRET: process.env.STREAM_API_SECRET,
-  IMAGEKIT_PUBLIC_KEY: process.env.IMAGEKIT_PUBLIC_KEY,
-  IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY,
-  IMAGEKIT_ID: process.env.IMAGEKIT_ID,
-  IMAGEKIT_URL_ENDPOINT: process.env.IMAGEKIT_URL_ENDPOINT,
-};
+const envSchema = z.object({
+  NODE_ENV: z
+    .enum(["development", "production", "test"])
+    .default("development"),
+  PORT: z.coerce.number().default(5000),
+  DATABASE_URL: z.string(),
+  BETTER_AUTH_URL: z.string(),
+  BASE_URL: z.string(),
+  FRONTEND_URL: z.string(),
+  POLAR_ACCESS_TOKEN: z.string().optional(),
+  POLAR_WEBHOOK_SECRET: z.string().optional(),
+  POLAR_API_BASE: z.string().optional(),
+  POLAR_CHECKOUT_PRODUCT_ID: z.string().optional(),
+  SENTRY_DSN: z.string().url().optional(),
+  STREAM_API_KEY: z.string().min(1),
+  STREAM_API_SECRET: z.string().min(1),
+  IMAGEKIT_PUBLIC_KEY: z.string().min(1),
+  IMAGEKIT_PRIVATE_KEY: z.string().min(1),
+  IMAGEKIT_ID: z.string().min(1),
+  IMAGEKIT_URL_ENDPOINT: z.string(),
+});
+export type Env = z.infer<typeof envSchema>;
+
+export function loadEnv() {
+  const parsed = envSchema.safeParse(process.env);
+  if (!parsed.success) {
+    console.error(parsed.error.flatten().fieldErrors);
+    throw new Error("Invalid environment variables");
+  }
+  return parsed.data;
+}
+
+let cachedEnv: Env | null = null;
+export function getEnv() {
+  if (!cachedEnv) {
+    cachedEnv = loadEnv();
+  }
+  return cachedEnv;
+}

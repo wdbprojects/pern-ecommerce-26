@@ -1,22 +1,38 @@
 import { routes } from "@/config/routes";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
-export const requireAuth = async (role: string) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+
+// GET SESSION
+
+export const getSession = async () => {
+  const cookieStore = cookies();
+  const cookieHeader = (await cookieStore)
+    .getAll()
+    .map((cookie) => {
+      return `${cookie.name}=${cookie.value}`;
+    })
+    .join("; ");
+  const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/api/me`, {
+    cache: "no-store",
+    headers: {
+      cookie: cookieHeader,
+    },
   });
-  if (!session || session.user.role !== role) {
+  if (!res.ok) return null;
+  return res.json();
+};
+
+export const requireAuth = async () => {
+  const session = await getSession();
+  if (!session) {
     redirect(routes.login);
   }
   return session;
 };
 
 export const requireUnauth = async (path: keyof typeof routes) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
   if (session) {
     redirect(routes[path]);
   }
