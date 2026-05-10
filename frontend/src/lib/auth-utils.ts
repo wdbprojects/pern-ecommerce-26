@@ -13,7 +13,7 @@ export const getSession = async () => {
       return `${cookie.name}=${cookie.value}`;
     })
     .join("; ");
-  const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/api/me`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/me`, {
     cache: "no-store",
     headers: {
       cookie: cookieHeader,

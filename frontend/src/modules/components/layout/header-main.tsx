@@ -16,15 +16,16 @@ const HeaderMain = async () => {
         <AppLogo />
         {/* // AUTH & BUTTONS */}
         <div className="flex shrink-0 items-center gap-4 p-1">
-          <div>
-            <span className="text-muted-foreground text-xs">Signed as: </span>
-            <Badge variant="default">
-              {session?.user?.role?.toUpperCase()}
-            </Badge>
-          </div>
-
+          {session && (
+            <div>
+              <span className="text-muted-foreground text-xs">Signed as: </span>
+              <Badge variant="default">
+                {session?.user?.role?.toUpperCase()}
+              </Badge>
+            </div>
+          )}
           <DarkMode />
-          {session.error ? <LoginButton /> : <SignOutButton />}
+          {!session ? <LoginButton /> : <SignOutButton />}
         </div>
       </div>
     </header>

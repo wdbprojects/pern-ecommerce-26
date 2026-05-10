@@ -1,5 +1,4 @@
 import DarkMode from "@/components/shared/dark-mode";
-import { headers } from "next/headers";
 import SignOutButton from "../auth/sign-out-button";
 import AppLogo from "@/components/shared/app-logo";
 import LoginButton from "../auth/login-button";
