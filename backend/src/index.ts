@@ -5,6 +5,7 @@ import { auth } from "./lib/auth";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { getEnv } from "./config/env";
+import cronJob from "./lib/cron";
 
 const ENV = getEnv();
 
@@ -118,6 +119,11 @@ app.get("/api/me", async (req, res) => {
   }
 });
 
+/* CRON - FIX FOR RENDER IDLE ON FREE PLAN */
+app.get("/health", (_req, res) => {
+  res.json({ ok: true });
+});
+
 /* API HEALTHY CHECK */
 app.get("/", (req, res) => {
   res.json({
@@ -134,4 +140,7 @@ app.get("/", (req, res) => {
 /* SERVER LISTEN */
 app.listen(ENV.PORT, () => {
   console.log(`Server is running on port ${ENV.PORT}`);
+  if (ENV.NODE_ENV === "production") {
+    cronJob.start();
+  }
 });
