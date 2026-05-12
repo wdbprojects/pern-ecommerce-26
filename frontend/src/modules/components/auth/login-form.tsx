@@ -55,7 +55,9 @@ const LoginForm = ({ className, ...props }: ComponentProps<"div">) => {
         reset();
         router.push(routes.home);
       } else {
-        toast.error(res.error || "Error from login form!!");
+        toast.error(
+          res.message || res.error || "Unknown error, try again later!!!",
+        );
       }
     });
   };
