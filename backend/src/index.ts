@@ -6,6 +6,10 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { getEnv } from "./config/env";
 import cronJob from "./lib/cron";
+import meRouter from "./routes/me.router";
+import authRouter from "./routes/auth.router";
+import productRouter from "./routes/product.router";
+import streamRouter from "./routes/stream.router";
 
 const ENV = getEnv();
 
@@ -24,100 +28,11 @@ app.use(
 /* BETTER AUTH */
 app.all("api/auth/*splat", toNodeHandler(auth));
 
-/* BETTER AUTH SIGN UP */
-app.post("/api/auth/sign-up/email", async (req, res) => {
-  try {
-    const result = await auth.api.signUpEmail({
-      body: {
-        email: req.body.email,
-        name: req.body.name,
-        password: req.body.password,
-      },
-    });
-    return res.status(200).json({
-      success: true,
-      user: result,
-      message: "User created successfully!!",
-    });
-  } catch (err) {
-    console.log(err);
-    return res
-      .status(400)
-      .json({ success: false, message: "Internal Server Error!!!" });
-  }
-});
-/* BETTER AUTH SIGN IN */
-app.post("/api/auth/sign-in/email", async (req, res) => {
-  try {
-    const response = await auth.api.signInEmail({
-      body: {
-        email: req.body.email,
-        password: req.body.password,
-      },
-      headers: fromNodeHeaders(req.headers),
-      asResponse: true,
-    });
-    // forward any set-cookie headers to the client browser
-    const setCookieHeader = response.headers.get("set-cookie");
-    if (setCookieHeader) {
-      res.setHeader("set-cookie", setCookieHeader);
-    }
-    // console.log({ setCookieHeader });
-
-    const data = await response.json();
-
-    return res.status(200).json({
-      success: true,
-      response: data,
-      message: "User logged in successfully!!",
-    });
-  } catch (err) {
-    console.log(err);
-    return res
-      .status(400)
-      .json({ success: false, message: "Internal Server Error!!!" });
-  }
-});
-
-/* BETTER AUTH SIGN OUT */
-app.post("/api/auth/sign-out", async (req, res) => {
-  try {
-    const response = await auth.api.signOut({
-      headers: fromNodeHeaders(req.headers),
-      asResponse: true,
-    });
-    const setCookieHeader = response.headers.get("set-cookie");
-    if (setCookieHeader) {
-      res.setHeader("set-cookie", setCookieHeader);
-    }
-    const data = await response.json();
-    return res.status(200).json({
-      success: true,
-      message: "User signed out successfully!!",
-    });
-  } catch (err) {
-    console.log(err);
-    return res
-      .status(400)
-      .json({ success: false, message: "Sign out failed!!!" });
-  }
-});
-
-app.get("/api/me", async (req, res) => {
-  try {
-    const session = await auth.api.getSession({
-      headers: fromNodeHeaders(req.headers),
-    });
-    // console.log("Incoming cookies:", req.headers.cookie); // for debugging
-    if (!session) {
-      return res.status(401).json({ error: "No active session!!!" });
-    }
-    return res.json(session);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to get session!!!" });
-  }
-});
+/* ROUTES */
+app.use("/api/me", meRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/products", productRouter);
+app.use("/api/stream", streamRouter);
 
 /* CRON - FIX FOR RENDER IDLE ON FREE PLAN */
 app.get("/health", (_req, res) => {
@@ -129,13 +44,10 @@ app.get("/", (req, res) => {
   res.json({
     message:
       "Welcome to Ecommerce26 API - Powered by PostgreSQL, Drizzle ORM & Better Auth",
-    endpoints: {
-      users: "/api/v1/users",
-      products: "/api/v1/products",
-      orders: "/api/v1/orders",
-    },
   });
 });
+
+// TODO: add middleware to handle errors
 
 /* SERVER LISTEN */
 app.listen(ENV.PORT, () => {
