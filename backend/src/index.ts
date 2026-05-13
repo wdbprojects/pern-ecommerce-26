@@ -10,8 +10,13 @@ import meRouter from "./routes/me.router";
 import authRouter from "./routes/auth.router";
 import productRouter from "./routes/product.router";
 import streamRouter from "./routes/stream.router";
+import checkoutRouter from "./routes/checkout.router";
 
 const ENV = getEnv();
+const rawJson = express.raw({ type: "application/json", limit: "1mb" });
+
+/* WEBHOOKS */
+app.post("/webhooks/polar", rawJson, (req, res) => {});
 
 /* MIDDLEWARES */
 app.use(express.json());
@@ -33,6 +38,7 @@ app.use("/api/me", meRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
 app.use("/api/stream", streamRouter);
+app.use("/api/checkout", checkoutRouter);
 
 /* CRON - FIX FOR RENDER IDLE ON FREE PLAN */
 app.get("/health", (_req, res) => {

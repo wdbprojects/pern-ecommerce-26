@@ -1,0 +1,1 @@
+ALTER TABLE "checkout_sessions" ALTER COLUMN "polar_checkout_id" SET DATA TYPE uuid;

@@ -19,7 +19,7 @@ export const checkoutSession = pgTable("checkout_sessions", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  polarCheckoutId: text("polar_checkout_id").unique(),
+  polarCheckoutId: uuid("polar_checkout_id").unique(),
   lines: jsonb("lines").$type<CheckoutSessionLine[]>().notNull(),
   totalCents: integer("total_cents").notNull(),
   currency: text("currency").notNull(),
