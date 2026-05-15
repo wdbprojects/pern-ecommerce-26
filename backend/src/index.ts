@@ -11,12 +11,15 @@ import authRouter from "./routes/auth.router";
 import productRouter from "./routes/product.router";
 import streamRouter from "./routes/stream.router";
 import checkoutRouter from "./routes/checkout.router";
+import { polarWebhookHandler } from "./webhooks/polar";
 
 const ENV = getEnv();
 const rawJson = express.raw({ type: "application/json", limit: "1mb" });
 
 /* WEBHOOKS */
-app.post("/webhooks/polar", rawJson, (req, res) => {});
+app.post("/webhooks/polar", rawJson, (req, res) => {
+  void polarWebhookHandler(req, res);
+});
 
 /* MIDDLEWARES */
 app.use(express.json());
