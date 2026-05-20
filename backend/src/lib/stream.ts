@@ -1,8 +1,6 @@
 import { Env, getEnv } from "../config/env";
 import { StreamChat } from "stream-chat";
 
-const ENV = getEnv();
-
 export const streamChatDisplayName = (
   role: any,
   displayName: string | null,
@@ -14,7 +12,7 @@ export const streamChatDisplayName = (
   return base;
 };
 
-export const getStreamChatServer = () => {
+export const getStreamChatServer = (ENV: Env) => {
   return StreamChat.getInstance(ENV.STREAM_API_KEY, ENV.STREAM_API_SECRET);
 };
 

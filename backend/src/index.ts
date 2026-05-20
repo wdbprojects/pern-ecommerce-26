@@ -6,12 +6,16 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { getEnv } from "./config/env";
 import cronJob from "./lib/cron";
+import { polarWebhookHandler } from "./webhooks/polar";
+
+/* ROUTES IMPORTS */
 import meRouter from "./routes/me.router";
 import authRouter from "./routes/auth.router";
 import productRouter from "./routes/product.router";
 import streamRouter from "./routes/stream.router";
 import checkoutRouter from "./routes/checkout.router";
-import { polarWebhookHandler } from "./webhooks/polar";
+import adminRouter from "./routes/admin.router";
+import orderRouter from "./routes/order.router";
 
 const ENV = getEnv();
 const rawJson = express.raw({ type: "application/json", limit: "1mb" });
@@ -42,6 +46,8 @@ app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
 app.use("/api/stream", streamRouter);
 app.use("/api/checkout", checkoutRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/orders", orderRouter);
 
 /* CRON - FIX FOR RENDER IDLE ON FREE PLAN */
 app.get("/health", (_req, res) => {
@@ -57,7 +63,13 @@ app.get("/", (req, res) => {
 });
 
 // TODO: add middleware to handle errors
-
+// app.use(
+//   (err: Error, _req: Request, res: Response, _next: NextFunction) => {
+//     res.status(500).json({
+//       error: "Internal server error",
+//     });
+//   },
+// );
 /* SERVER LISTEN */
 app.listen(ENV.PORT, () => {
   console.log(`Server is running on port ${ENV.PORT}`);

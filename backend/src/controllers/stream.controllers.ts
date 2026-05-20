@@ -19,9 +19,8 @@ export const createStreamToken = async (
     if (!session) {
       res.status(401).json({ error: " Unauthorized!!" });
     }
-    console.log(session);
 
-    const server = getStreamChatServer();
+    const server = getStreamChatServer(ENV);
     const user = session?.user;
 
     const name = streamChatDisplayName(

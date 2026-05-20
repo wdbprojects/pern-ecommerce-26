@@ -36,7 +36,6 @@ export const signInController = async (req: Request, res: Response) => {
       headers: fromNodeHeaders(req.headers),
       asResponse: true,
     });
-    console.log(response);
     // forward any set-cookie headers to the client browser
     if (response.ok) {
       const setCookieHeader = response.headers.get("set-cookie");
