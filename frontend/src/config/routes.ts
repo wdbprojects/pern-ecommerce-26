@@ -3,6 +3,7 @@ export const routes = {
   about: "/about",
   /* DASHBOARD */
   dashboard: "/dashboard",
+  admin: "/dashboard/admin",
   /* AUTH */
   login: "/auth/login",
   register: "/auth/register",

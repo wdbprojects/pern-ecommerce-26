@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: ENV.FRONTEND_URL,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
   }),
 );
@@ -41,7 +41,7 @@ app.use(
 app.all("api/auth/*splat", toNodeHandler(auth));
 
 /* ROUTES */
-app.use("/api/me", meRouter);
+app.use("/api/auth", meRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
 app.use("/api/stream", streamRouter);

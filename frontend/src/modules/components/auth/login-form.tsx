@@ -23,9 +23,31 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, LogIn } from "lucide-react";
 import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
+
+/* Login Mutation Function */
+const loginUser = async (data: LoginSchemaType) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-in/email`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+  const result = await response.json();
+  if (!response.ok || !result.success) {
+    throw new Error(
+      result.message || result.error || "Login failed, try again later!!!",
+    );
+  }
+  return result;
+};
 
 const LoginForm = ({ className, ...props }: ComponentProps<"div">) => {
-  const [pendingLogin, startLoginTransition] = useTransition();
   const router = useRouter();
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
@@ -36,7 +58,7 @@ const LoginForm = ({ className, ...props }: ComponentProps<"div">) => {
   });
   const { handleSubmit, control, reset } = form;
 
-  const onSubmit = (data: LoginSchemaType) => {
+  /*   const onSubmit = (data: LoginSchemaType) => {
     startLoginTransition(async () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-in/email`,
@@ -60,6 +82,23 @@ const LoginForm = ({ className, ...props }: ComponentProps<"div">) => {
         );
       }
     });
+  }; */
+
+  // TanStack Query Mutation
+  const loginMutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) => {
+      toast.success(data.message || "Login successful!");
+      reset();
+      router.push(routes.home);
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const onSubmit = (data: LoginSchemaType) => {
+    loginMutation.mutate(data);
   };
 
   return (
@@ -138,9 +177,9 @@ const LoginForm = ({ className, ...props }: ComponentProps<"div">) => {
                   className="w-full"
                   type="submit"
                   form="login-user"
-                  disabled={pendingLogin}
+                  disabled={loginMutation.isPending}
                 >
-                  {pendingLogin ? (
+                  {loginMutation.isPending ? (
                     <div className="flex items-center justify-center gap-2">
                       <Loader2 className="size-3.5 animate-spin" />
                       <span>Pending...</span>
@@ -158,7 +197,7 @@ const LoginForm = ({ className, ...props }: ComponentProps<"div">) => {
                     className="text-xs"
                     type="button"
                     variant="link"
-                    disabled={pendingLogin}
+                    disabled={loginMutation.isPending}
                     onClick={() => {
                       reset();
                     }}

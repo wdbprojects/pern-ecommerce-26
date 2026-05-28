@@ -5,9 +5,6 @@ import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterSchemaType } from "@/schemas/auth-schemas";
-import Image from "next/image";
-import Link from "next/link";
-import { routes } from "@/config/routes";
 import { cn } from "@/lib/utils";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,32 +19,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FilePen, Loader2 } from "lucide-react";
+import { routes } from "@/config/routes";
+import Link from "next/link";
+import Image from "next/image";
+import { registerAction } from "@/_actions/auth-actions";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
-
-/* Register Mutation Function */
-const registerUser = async (data: RegisterSchemaType) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-up/email`,
-    {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    },
-  );
-  const result = await response.json();
-  if (!response.ok || !result.success) {
-    throw new Error(
-      result.message || result.error || "Register failed, try again later!!!",
-    );
-  }
-  return result;
-};
 
 const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
+  const [pendingRegister, startRegisterTransition] = useTransition();
   const router = useRouter();
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerSchema),
@@ -60,21 +39,17 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
   });
   const { handleSubmit, control, reset } = form;
 
-  // TanStack Query Mutation
-  const registerMutation = useMutation({
-    mutationFn: registerUser,
-    onSuccess: (data) => {
-      toast.success(data.message || "Register successful!");
-      reset();
-      router.push(routes.login);
-    },
-    onError: (error: Error) => {
-      toast.error(error.message);
-    },
-  });
-
   const onSubmit = (data: RegisterSchemaType) => {
-    registerMutation.mutate(data);
+    startRegisterTransition(async () => {
+      const response = await registerAction(data);
+      if (response.success) {
+        toast.success(`${response.message}: ${response.user.user.name}`);
+        reset();
+        router.push(routes.login);
+      } else {
+        toast.error(response.error || "Error from login form!!");
+      }
+    });
   };
 
   return (
@@ -94,7 +69,6 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
                   Fill in the form below to create your account
                 </p>
               </div>
-
               {/* FULL NAME */}
               <Controller
                 control={control}
@@ -144,8 +118,7 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
                   );
                 }}
               />
-
-              {/* PASSWORD */}
+              {/* PASSWORD & CONFIRM PASSWORD */}
               <Field>
                 <Field className="grid grid-cols-2 gap-2">
                   {/* PASSWORD */}
@@ -203,7 +176,6 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
                   Must be at least 8 characters
                 </FieldDescription>
               </Field>
-
               {/* ACTION BUTTONS */}
               <FieldGroup className="mt-4 flex w-full flex-col items-center justify-between gap-0!">
                 <Button
@@ -212,9 +184,9 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
                   className="w-full"
                   type="submit"
                   form="register-user"
-                  disabled={registerMutation.isPending}
+                  disabled={pendingRegister}
                 >
-                  {registerMutation.isPending ? (
+                  {pendingRegister ? (
                     <div className="flex items-center justify-center gap-2">
                       <Loader2 className="size-3.5 animate-spin" />
                       <span>Pending...</span>
@@ -232,7 +204,7 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
                     className="text-xs"
                     type="button"
                     variant="link"
-                    disabled={registerMutation.isPending}
+                    disabled={pendingRegister}
                     onClick={() => {
                       reset();
                     }}

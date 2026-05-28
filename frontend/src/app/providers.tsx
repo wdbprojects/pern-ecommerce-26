@@ -1,16 +1,12 @@
 "use client";
 
+import { QueryProvider } from "@/components/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { getQueryClient } from "@/lib/get-query-client";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "@/components/ui/sonner";
 import { LayoutPropsMain } from "@/config/types";
 import NextTopLoader from "nextjs-toploader";
 
 const Providers = ({ children }: LayoutPropsMain) => {
-  const queryClient = getQueryClient();
-
   return (
     <ThemeProvider
       attribute="class"
@@ -18,17 +14,9 @@ const Providers = ({ children }: LayoutPropsMain) => {
       disableTransitionOnChange
     >
       <div>
-        <QueryClientProvider client={queryClient}>
-          <NextTopLoader showSpinner={false} color="#3b82f6" />
-          {children}
-          <Toaster
-            richColors
-            closeButton
-            position="bottom-right"
-            expand={true}
-          />
-          <ReactQueryDevtools />
-        </QueryClientProvider>
+        <NextTopLoader showSpinner={false} color="#3b82f6" />
+        <QueryProvider>{children}</QueryProvider>
+        <Toaster richColors closeButton position="bottom-right" expand={true} />
       </div>
     </ThemeProvider>
   );

@@ -10,7 +10,7 @@ const envSchema = z.object({
   DATABASE_URL: z.string(),
   BETTER_AUTH_URL: z.string(),
   BASE_URL: z.string(),
-  FRONTEND_URL: z.string(),
+  FRONTEND_URL: z.string().default("http://localhost:3000"),
   POLAR_ACCESS_TOKEN: z.string().optional(),
   POLAR_WEBHOOK_SECRET: z.string().optional(),
   POLAR_API_BASE: z.string().url().default("https://sandbox-api.polar.sh"),

@@ -6,14 +6,16 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Loader2, LogOut } from "lucide-react";
 import { toast } from "sonner";
-import { signOut } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { routes } from "@/config/routes";
+import { useQueryClient } from "@tanstack/react-query";
 
 const SignOutButton = () => {
   const [pendingLogout, startLogoutTransition] = useTransition();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const handleLogout = () => {
+  /*   const handleLogout = () => {
     startLogoutTransition(async () => {
       await signOut({
         fetchOptions: {
@@ -28,6 +30,16 @@ const SignOutButton = () => {
         },
       });
     });
+  }; */
+
+  const handleSignOut = () => {
+    startLogoutTransition(async () => {
+      await authClient.signOut();
+      queryClient.clear();
+      router.push(routes.login);
+      router.refresh();
+      toast.info("User signed out successfully");
+    });
   };
 
   return (
@@ -35,7 +47,8 @@ const SignOutButton = () => {
       variant="destructive"
       size="sm"
       className=""
-      onClick={handleLogout}
+      // onClick={handleLogout}
+      onClick={handleSignOut}
       disabled={pendingLogout}
     >
       {pendingLogout ? (
