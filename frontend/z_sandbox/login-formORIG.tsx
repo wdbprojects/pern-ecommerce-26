@@ -4,7 +4,7 @@ import { ComponentProps, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema, RegisterSchemaType } from "@/schemas/auth-schemas";
+import { loginSchema, LoginSchemaType } from "@/schemas/auth-schemas";
 import Image from "next/image";
 import Link from "next/link";
 import { routes } from "@/config/routes";
@@ -21,60 +21,45 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FilePen, Loader2 } from "lucide-react";
+import { Loader2, LogIn } from "lucide-react";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
 
-/* Register Mutation Function */
-const registerUser = async (data: RegisterSchemaType) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-up/email`,
-    {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    },
-  );
-  const result = await response.json();
-  if (!response.ok || !result.success) {
-    throw new Error(
-      result.message || result.error || "Register failed, try again later!!!",
-    );
-  }
-  return result;
-};
-
-const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
+const LoginForm = ({ className, ...props }: ComponentProps<"div">) => {
+  const [pendingLogin, startLoginTransition] = useTransition();
   const router = useRouter();
-  const form = useForm<RegisterSchemaType>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<LoginSchemaType>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
   const { handleSubmit, control, reset } = form;
 
-  // TanStack Query Mutation
-  const registerMutation = useMutation({
-    mutationFn: registerUser,
-    onSuccess: (data) => {
-      toast.success(data.message || "Register successful!");
-      reset();
-      router.push(routes.login);
-    },
-    onError: (error: Error) => {
-      toast.error(error.message);
-    },
-  });
-
-  const onSubmit = (data: RegisterSchemaType) => {
-    registerMutation.mutate(data);
+  const onSubmit = (data: LoginSchemaType) => {
+    startLoginTransition(async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-in/email`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        },
+      );
+      const res = await response.json();
+      if (res.success) {
+        toast.success(`${res.message}`);
+        reset();
+        router.push(routes.home);
+      } else {
+        toast.error(
+          res.message || res.error || "Unknown error, try again later!!!",
+        );
+      }
+    });
   };
 
   return (
@@ -83,42 +68,17 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
         <CardContent className="grid p-0 md:grid-cols-2">
           {/* LEFT SIDE */}
           <form
-            id="register-user"
+            id="login-user"
             onSubmit={handleSubmit(onSubmit)}
             className="p-6 md:p-8"
           >
             <FieldGroup className="gap-4">
               <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Create your account</h1>
+                <h1 className="text-2xl font-bold">Welcome back!</h1>
                 <p className="text-muted-foreground text-sm text-balance">
-                  Fill in the form below to create your account
+                  Enter your email below to login to your account
                 </p>
               </div>
-
-              {/* FULL NAME */}
-              <Controller
-                control={control}
-                name="name"
-                render={({ field, fieldState }) => {
-                  return (
-                    <Field className="gap-2">
-                      <FieldLabel htmlFor="name">Full Name</FieldLabel>
-                      <Input
-                        id="name"
-                        type="text"
-                        placeholder="John Doe"
-                        autoComplete="off"
-                        aria-invalid={fieldState.invalid}
-                        {...field}
-                      />
-                      <FieldError
-                        errors={[fieldState.error]}
-                        className="text-xs italic"
-                      />
-                    </Field>
-                  );
-                }}
-              />
 
               {/* EMAIL */}
               <Controller
@@ -146,63 +106,29 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
               />
 
               {/* PASSWORD */}
-              <Field>
-                <Field className="grid grid-cols-2 gap-2">
-                  {/* PASSWORD */}
-                  <Controller
-                    control={control}
-                    name="password"
-                    render={({ field, fieldState }) => {
-                      return (
-                        <Field className="gap-2">
-                          <FieldLabel htmlFor="password">Password</FieldLabel>
-                          <Input
-                            id="password"
-                            type="password"
-                            placeholder="Your password here"
-                            autoComplete="off"
-                            aria-invalid={fieldState.invalid}
-                            {...field}
-                          />
-                          <FieldError
-                            errors={[fieldState.error]}
-                            className="text-xs italic"
-                          />
-                        </Field>
-                      );
-                    }}
-                  />
-                  {/* CONFIRM PASSWORD */}
-                  <Controller
-                    control={control}
-                    name="confirmPassword"
-                    render={({ field, fieldState }) => {
-                      return (
-                        <Field className="gap-2">
-                          <FieldLabel htmlFor="confirmPassword">
-                            Confirm Password
-                          </FieldLabel>
-                          <Input
-                            id="confirmPassword"
-                            type="password"
-                            placeholder="Confirm your password"
-                            autoComplete="off"
-                            aria-invalid={fieldState.invalid}
-                            {...field}
-                          />
-                          <FieldError
-                            errors={[fieldState.error]}
-                            className="text-xs italic"
-                          />
-                        </Field>
-                      );
-                    }}
-                  />
-                </Field>
-                <FieldDescription className="mt-0 pt-0 text-xs">
-                  Must be at least 8 characters
-                </FieldDescription>
-              </Field>
+              <Controller
+                control={control}
+                name="password"
+                render={({ field, fieldState }) => {
+                  return (
+                    <Field className="gap-2">
+                      <FieldLabel htmlFor="password">Password</FieldLabel>
+                      <Input
+                        id="password"
+                        type="password"
+                        placeholder="Your password here"
+                        autoComplete="off"
+                        aria-invalid={fieldState.invalid}
+                        {...field}
+                      />
+                      <FieldError
+                        errors={[fieldState.error]}
+                        className="text-xs italic"
+                      />
+                    </Field>
+                  );
+                }}
+              />
 
               {/* ACTION BUTTONS */}
               <FieldGroup className="mt-4 flex w-full flex-col items-center justify-between gap-0!">
@@ -211,18 +137,18 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
                   size="default"
                   className="w-full"
                   type="submit"
-                  form="register-user"
-                  disabled={registerMutation.isPending}
+                  form="login-user"
+                  disabled={pendingLogin}
                 >
-                  {registerMutation.isPending ? (
+                  {pendingLogin ? (
                     <div className="flex items-center justify-center gap-2">
                       <Loader2 className="size-3.5 animate-spin" />
                       <span>Pending...</span>
                     </div>
                   ) : (
                     <div className="flex items-center justify-center gap-2">
-                      <FilePen className="size-3.5" />
-                      <span className="font-semibold">Register</span>
+                      <LogIn className="size-3.5" />
+                      <span className="font-semibold">Login</span>
                     </div>
                   )}
                 </Button>
@@ -232,7 +158,7 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
                     className="text-xs"
                     type="button"
                     variant="link"
-                    disabled={registerMutation.isPending}
+                    disabled={pendingLogin}
                     onClick={() => {
                       reset();
                     }}
@@ -265,10 +191,10 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
                 </Button>
               </Field>
               <FieldDescription className="text-center">
-                Already have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Button variant="link" size="sm">
-                  <Link href={routes.login} className="font-semibold">
-                    Login
+                  <Link href={routes.register} className="font-semibold">
+                    Register
                   </Link>
                 </Button>
               </FieldDescription>
@@ -277,7 +203,7 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
           {/* RIGHT SIDE */}
           <div className="bg-muted relative hidden md:block">
             <Image
-              src="/register-bg.jpg"
+              src="/login-bg.jpg"
               width={1000}
               height={1000}
               alt=""
@@ -297,4 +223,4 @@ const RegisterForm = ({ className, ...props }: ComponentProps<"div">) => {
   );
 };
 
-export default RegisterForm;
+export default LoginForm;

@@ -1,4 +1,6 @@
 import { createAuthClient } from "better-auth/react";
+import { adminClient } from "better-auth/client/plugins";
+import { inferAdditionalFields } from "better-auth/client/plugins";
 // import { polarClient } from "@polar-sh/better-auth/client";
 
 interface IOptions {
@@ -16,8 +18,26 @@ export const authClient = createAuthClient({
       ...options,
       credentials: "include", // Required for cookies
     }),
-
-  // plugins: [polarClient()]
+  plugins: [
+    adminClient(),
+    inferAdditionalFields({
+      user: {
+        role: {
+          type: "string",
+        },
+        banned: {
+          type: "boolean",
+        },
+        banReason: {
+          type: "string",
+        },
+        banExpires: {
+          type: "date",
+        },
+      },
+      session: {},
+    }),
+  ],
 });
 
-export const { signIn, signUp, useSession, signOut } = authClient;
+export const { signIn, signUp, signOut, getSession } = authClient;

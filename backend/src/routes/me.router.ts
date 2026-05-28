@@ -4,7 +4,7 @@ import { fromNodeHeaders } from "better-auth/node";
 
 const router = Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/get-session", async (req, res, next) => {
   try {
     const session = await auth.api.getSession({
       headers: fromNodeHeaders(req.headers),

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Nunito_Sans, DM_Sans } from "next/font/google";
+import { Nunito_Sans, DM_Sans, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import Providers from "@/app/providers";
 import { cn } from "@/lib/utils";
 
-const dmSans = DM_Sans({subsets:['latin'],variable:'--font-sans'});
+const ibmPlexSans = IBM_Plex_Sans({subsets:['latin'],variable:'--font-sans'});
 
 const nunitoSans = Nunito_Sans({
   style: ["normal", "italic"],
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("font-sans", dmSans.variable)}>
+    <html lang="en" suppressHydrationWarning className={cn("font-sans", ibmPlexSans.variable)}>
       <body className={`${nunitoSans.className} antialiased`}>
         <Providers>{children}</Providers>
       </body>
