@@ -16,6 +16,8 @@ import { Lock, Package, ShoppingBag, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { routes } from "@/config/routes";
+import { useCart } from "@/store/cart";
+import { CartState } from "@/config/types";
 
 const HeaderMain = () => {
   // const session = await getSession();
@@ -27,7 +29,15 @@ const HeaderMain = () => {
     enabled: true,
   });
 
-  console.log(data);
+  const cartCount = useCart((state: CartState) => {
+    return state.items.reduce((n, line) => {
+      return n + line.quantity;
+    }, 0);
+  });
+
+  const handleResetProducts = useCart((state: CartState) => {
+    return state.removeItem;
+  });
 
   if (isLoading) {
     return (
@@ -45,9 +55,7 @@ const HeaderMain = () => {
       </header>
     );
   }
-
-  const cartCount = 105;
-
+  console.log({ cartCount });
   return (
     <header className="bg-background fixed top-0 right-0 z-50 h-auto w-full border-b px-2 py-2">
       <div className="container mx-auto flex w-full items-center justify-between gap-1 sm:gap-2">
@@ -63,6 +71,14 @@ const HeaderMain = () => {
               </span>
             </div>
           )} */}
+          <Button
+            variant="destructive"
+            onClick={() => {
+              handleResetProducts("sdf");
+            }}
+          >
+            Reset Products
+          </Button>
           {data?.session && data?.user?.role === "admin" && (
             <Button
               size="sm"
