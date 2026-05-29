@@ -2,31 +2,25 @@ const base = process.env.NEXT_PUBLIC_API_URL;
 
 export const apiFetch = async (
   path: string,
-  opts: { method?: string; body?: FormData } = {},
+  opts: {
+    method?: string;
+    body?: FormData;
+    headers?: Record<string, string>;
+  } = {},
 ) => {
-  const { method = "GET", body } = opts;
-  const headers = { "Content-Type": "application/json" };
-
-  let res;
-
-  try {
-    res = await fetch(`${base}${path}`, {
-      method: method,
-      credentials: "include",
-      headers: headers,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-    });
-  } catch (err) {
-    throw err;
-  }
-  const data = await res.json();
-  if (!res.ok) {
-    const message =
-      typeof data?.error === "string" ? data.error : res.statusText;
-    const error = new Error(
-      typeof message === "string" ? message : "Request failed",
-    );
-    throw error;
+  const { method = "GET", body, headers = {} } = opts;
+  const response = await fetch(`${base}${path}`, {
+    method,
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...headers,
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || data.message || "Request failed");
   }
   return data;
 };

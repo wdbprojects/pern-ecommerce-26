@@ -9,6 +9,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(5000),
   DATABASE_URL: z.string(),
   BETTER_AUTH_URL: z.string(),
+  BETTER_AUTH_SECRET: z.string(),
   BASE_URL: z.string(),
   FRONTEND_URL: z.string().default("http://localhost:3000"),
   POLAR_ACCESS_TOKEN: z.string().optional(),

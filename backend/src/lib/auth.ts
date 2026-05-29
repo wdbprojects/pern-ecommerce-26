@@ -10,23 +10,42 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
+  // baseUrl: ENV.BASE_URL,
+  secret: ENV.BETTER_AUTH_SECRET,
+  trustedOrigins: [ENV.FRONTEND_URL],
+  // cross-domain cookies
+  advanced: {
+    cookiePrefix: "ecommerce26",
+    crossSubDomainCookies: { enabled: false },
+    defaultCookies: {
+      session_token: {
+        name: "auth_session",
+        options: {
+          httpOnly: true,
+          secure: ENV.NODE_ENV === "production",
+          sameSite: "lax",
+          path: "/",
+          domain: ENV.NODE_ENV === "production" ? ".onrender.com" : undefined,
+        },
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
     minPasswordLength: 8,
   },
-  baseUrl: ENV.BASE_URL,
-  trustedOrigins: [ENV.FRONTEND_URL],
-  cookies: {
-    session: {
-      attributes: {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: false,
-        path: "/",
-      },
-    },
-  },
+
+  // cookies: {
+  //   session: {
+  //     attributes: {
+  //       httpOnly: true,
+  //       sameSite: "lax",
+  //       secure: false,
+  //       path: "/",
+  //     },
+  //   },
+  // },
   plugins: [
     admin({
       defaultRole: "customer",

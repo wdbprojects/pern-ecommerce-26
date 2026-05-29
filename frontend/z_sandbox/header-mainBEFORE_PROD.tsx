@@ -23,29 +23,9 @@ const HeaderMain = () => {
   // const session = await getSession();
   // const { session, isLoading } = useSession();
 
-  const getSession = async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/get-session`,
-      {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch user session");
-    }
-    return response.json();
-  };
-
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["session"],
-    queryFn: getSession,
-    retry: false,
-    refetchOnWindowFocus: true,
-    placeholderData: (previousData) => previousData,
+    queryKey: ["me"],
+    queryFn: () => apiFetch("/api/auth/get-session", {}),
     enabled: true,
   });
 

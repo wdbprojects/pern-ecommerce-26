@@ -3,24 +3,20 @@ import { adminClient } from "better-auth/client/plugins";
 import { inferAdditionalFields } from "better-auth/client/plugins";
 // import { polarClient } from "@polar-sh/better-auth/client";
 
-/* interface IOptions {
+interface IOptions {
   httpOnly: boolean;
   secure: boolean;
   sameSite: string;
   path: string;
-} */
+}
 
 export const authClient = createAuthClient({
   // baseURL: process.env.NEXT_PUBLIC_API_URL,
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  fetch: (url: string, options: RequestInit) =>
+  fetch: (url: string, options: IOptions) =>
     fetch(url, {
       ...options,
       credentials: "include", // Required for cookies
-      headers: {
-        ...options.headers,
-        "Content-Type": "application/json",
-      },
     }),
   plugins: [
     adminClient(),
