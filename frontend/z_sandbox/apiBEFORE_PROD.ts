@@ -1,4 +1,4 @@
-const base = process.env.NEXT_PUBLIC_API_URL;
+/* const base = process.env.NEXT_PUBLIC_API_URL;
 
 export const apiFetch = async (
   path: string,
@@ -30,3 +30,4 @@ export const apiFetch = async (
   }
   return data;
 };
+ */

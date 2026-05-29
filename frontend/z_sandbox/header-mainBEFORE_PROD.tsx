@@ -1,136 +1,136 @@
-"use client";
+// "use client";
 
-import LoginButton from "@/modules/components/auth/login-button";
-import SignOutButton from "../auth/sign-out-button";
+// import LoginButton from "@/modules/components/auth/login-button";
+// import SignOutButton from "../auth/sign-out-button";
 
-import DarkMode from "@/components/shared/dark-mode";
-import AppLogo from "@/components/shared/app-logo";
-import { Badge } from "@/components/ui/badge";
-// import { getSession } from "@/lib/auth-utils";
-// import { useSession } from "@/hooks/use-session";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Lock, Package, ShoppingBag, ShoppingCart } from "lucide-react";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { routes } from "@/config/routes";
-import { useCart } from "@/store/cart";
-import { CartState } from "@/config/types";
+// import DarkMode from "@/components/shared/dark-mode";
+// import AppLogo from "@/components/shared/app-logo";
+// import { Badge } from "@/components/ui/badge";
+// // import { getSession } from "@/lib/auth-utils";
+// // import { useSession } from "@/hooks/use-session";
+// import { Skeleton } from "@/components/ui/skeleton";
+// import { useQuery } from "@tanstack/react-query";
+// import { apiFetch } from "@/lib/api";
+// import { Button, buttonVariants } from "@/components/ui/button";
+// import { Lock, Package, ShoppingBag, ShoppingCart } from "lucide-react";
+// import { cn } from "@/lib/utils";
+// import Link from "next/link";
+// import { routes } from "@/config/routes";
+// import { useCart } from "@/store/cart";
+// import { CartState } from "@/config/types";
 
-const HeaderMain = () => {
-  // const session = await getSession();
-  // const { session, isLoading } = useSession();
+// const HeaderMain = () => {
+//   // const session = await getSession();
+//   // const { session, isLoading } = useSession();
 
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["me"],
-    queryFn: () => apiFetch("/api/auth/get-session", {}),
-    enabled: true,
-  });
+//   const { data, isLoading, error, refetch } = useQuery({
+//     queryKey: ["me"],
+//     queryFn: () => apiFetch("/api/auth/get-session", {}),
+//     enabled: true,
+//   });
 
-  const cartCount = useCart((state: CartState) => {
-    return state.items.reduce((n, line) => {
-      return n + line.quantity;
-    }, 0);
-  });
+//   const cartCount = useCart((state: CartState) => {
+//     return state.items.reduce((n, line) => {
+//       return n + line.quantity;
+//     }, 0);
+//   });
 
-  const handleResetProducts = useCart((state: CartState) => {
-    return state.removeItem;
-  });
+//   const handleResetProducts = useCart((state: CartState) => {
+//     return state.removeItem;
+//   });
 
-  if (isLoading) {
-    return (
-      <header className="bg-background fixed top-0 right-0 z-50 h-auto w-full border-b px-2 py-2">
-        <div className="container mx-auto flex w-full items-center justify-between gap-1 sm:gap-2">
-          <AppLogo />
-          <div className="flex shrink-0 items-center gap-2 p-1">
-            <Skeleton className="h-6 w-20" />
-            <Skeleton className="h-6 w-20" />
-            <Skeleton className="h-6 w-20" />
-            <Skeleton className="h-6 w-22" />
-            <Skeleton className="h-5 w-9 rounded-lg" />
-          </div>
-        </div>
-      </header>
-    );
-  }
-  console.log({ cartCount });
-  return (
-    <header className="bg-background fixed top-0 right-0 z-50 h-auto w-full border-b px-2 py-2">
-      <div className="container mx-auto flex w-full items-center justify-between gap-1 sm:gap-2">
-        {/* // MENU & LOGO  & NAV LINKS */}
-        <AppLogo />
-        {/* // AUTH & BUTTONS */}
-        <div className="flex shrink-0 items-center gap-2 p-1">
-          {/* {data?.session && (
-            <div>
-              <span className="text-muted-foreground text-xs">Signed as: </span>
-              <span className="text-muted-foreground text-xs font-bold">
-                {data?.user?.role}
-              </span>
-            </div>
-          )} */}
-          <Button
-            variant="destructive"
-            onClick={() => {
-              handleResetProducts("sdf");
-            }}
-          >
-            Reset Products
-          </Button>
-          {data?.session && data?.user?.role === "admin" && (
-            <Button
-              size="sm"
-              variant="secondary"
-              className="flex items-center justify-center gap-2"
-            >
-              <Lock className="size-3.5" />
-              <span>Admin</span>
-            </Button>
-          )}
-          <Button
-            size="sm"
-            variant="outline"
-            className="flex items-center justify-center gap-2"
-          >
-            <ShoppingBag className="size-3.5" />
-            <span>Shop</span>
-          </Button>
+//   if (isLoading) {
+//     return (
+//       <header className="bg-background fixed top-0 right-0 z-50 h-auto w-full border-b px-2 py-2">
+//         <div className="container mx-auto flex w-full items-center justify-between gap-1 sm:gap-2">
+//           <AppLogo />
+//           <div className="flex shrink-0 items-center gap-2 p-1">
+//             <Skeleton className="h-6 w-20" />
+//             <Skeleton className="h-6 w-20" />
+//             <Skeleton className="h-6 w-20" />
+//             <Skeleton className="h-6 w-22" />
+//             <Skeleton className="h-5 w-9 rounded-lg" />
+//           </div>
+//         </div>
+//       </header>
+//     );
+//   }
+//   console.log({ cartCount });
+//   return (
+//     <header className="bg-background fixed top-0 right-0 z-50 h-auto w-full border-b px-2 py-2">
+//       <div className="container mx-auto flex w-full items-center justify-between gap-1 sm:gap-2">
+//         {/* // MENU & LOGO  & NAV LINKS */}
+//         <AppLogo />
+//         {/* // AUTH & BUTTONS */}
+//         <div className="flex shrink-0 items-center gap-2 p-1">
+//           {/* {data?.session && (
+//             <div>
+//               <span className="text-muted-foreground text-xs">Signed as: </span>
+//               <span className="text-muted-foreground text-xs font-bold">
+//                 {data?.user?.role}
+//               </span>
+//             </div>
+//           )} */}
+//           <Button
+//             variant="destructive"
+//             onClick={() => {
+//               handleResetProducts("sdf");
+//             }}
+//           >
+//             Reset Products
+//           </Button>
+//           {data?.session && data?.user?.role === "admin" && (
+//             <Button
+//               size="sm"
+//               variant="secondary"
+//               className="flex items-center justify-center gap-2"
+//             >
+//               <Lock className="size-3.5" />
+//               <span>Admin</span>
+//             </Button>
+//           )}
+//           <Button
+//             size="sm"
+//             variant="outline"
+//             className="flex items-center justify-center gap-2"
+//           >
+//             <ShoppingBag className="size-3.5" />
+//             <span>Shop</span>
+//           </Button>
 
-          <Button
-            size="sm"
-            variant="outline"
-            className="flex items-center justify-center gap-2"
-          >
-            <Package className="size-3.5" />
-            <span>Orders</span>
-          </Button>
+//           <Button
+//             size="sm"
+//             variant="outline"
+//             className="flex items-center justify-center gap-2"
+//           >
+//             <Package className="size-3.5" />
+//             <span>Orders</span>
+//           </Button>
 
-          <Link
-            href={routes.admin}
-            className={cn(
-              `indicator relative flex cursor-pointer items-center justify-between gap-2 rounded-md`,
-              buttonVariants({
-                variant: "outline",
-                size: "sm",
-              }),
-            )}
-            aria-label={cartCount > 0 ? `Cart, ${cartCount} items.` : "Cart"}
-          >
-            <ShoppingCart className="mr-0.5 size-4.5" />
-            <Badge variant="default" className="rounded-md px-1! text-xs">
-              {cartCount > 99 ? 99 : cartCount}
-              {cartCount > 99 && <sup className="">+</sup>}
-            </Badge>
-          </Link>
+//           <Link
+//             href={routes.admin}
+//             className={cn(
+//               `indicator relative flex cursor-pointer items-center justify-between gap-2 rounded-md`,
+//               buttonVariants({
+//                 variant: "outline",
+//                 size: "sm",
+//               }),
+//             )}
+//             aria-label={cartCount > 0 ? `Cart, ${cartCount} items.` : "Cart"}
+//           >
+//             <ShoppingCart className="mr-0.5 size-4.5" />
+//             <Badge variant="default" className="rounded-md px-1! text-xs">
+//               {cartCount > 99 ? 99 : cartCount}
+//               {cartCount > 99 && <sup className="">+</sup>}
+//             </Badge>
+//           </Link>
 
-          {!data?.session ? <LoginButton /> : <SignOutButton />}
-          <DarkMode />
-        </div>
-      </div>
-    </header>
-  );
-};
+//           {!data?.session ? <LoginButton /> : <SignOutButton />}
+//           <DarkMode />
+//         </div>
+//       </div>
+//     </header>
+//   );
+// };
 
-export default HeaderMain;
+// export default HeaderMain;

@@ -1,4 +1,4 @@
-import { createAuthClient } from "better-auth/react";
+/* import { createAuthClient } from "better-auth/react";
 import { adminClient } from "better-auth/client/plugins";
 import { inferAdditionalFields } from "better-auth/client/plugins";
 // import { polarClient } from "@polar-sh/better-auth/client";
@@ -41,3 +41,4 @@ export const authClient = createAuthClient({
 });
 
 export const { signIn, signUp, signOut, getSession } = authClient;
+ */
