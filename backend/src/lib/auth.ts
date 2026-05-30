@@ -13,30 +13,12 @@ export const auth = betterAuth({
   baseUrl: ENV.BETTER_AUTH_URL,
   secret: ENV.BETTER_AUTH_SECRET,
   trustedOrigins: [ENV.FRONTEND_URL],
-  disableSecurePrefix: true,
 
   cookieOptions: {
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
+    secure: ENV.NODE_ENV === "production",
+    sameSite: "lax",
     path: "/",
-  },
-  // cross-domain cookies
-  advanced: {
-    cookiePrefix: "ecommerce26",
-    defaultCookies: {
-      session_token: {
-        name: "better_auth_session",
-        options: {
-          httpOnly: true,
-          // secure: ENV.NODE_ENV === "production" ? true : false,
-          // sameSite: ENV.NODE_ENV === "production" ? "none" : "lax",
-          secure: true,
-          sameSite: "none",
-          path: "/",
-        },
-      },
-    },
   },
   emailAndPassword: {
     enabled: true,
