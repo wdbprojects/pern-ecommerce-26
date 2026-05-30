@@ -26,37 +26,29 @@ app.post("/webhooks/polar", rawJson, (req, res) => {
 });
 
 /* MIDDLEWARES */
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: [ENV.FRONTEND_URL, "https://pern-ecommerce-26.vercel.app"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "Cookie",
-      "Set-Cookie",
-      "X-Requested-With",
-    ],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "Set-Cookie"],
     exposedHeaders: ["Set-Cookie"],
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
   }),
 );
-
-app.options("*", cors());
-
-/* BETTER AUTH */
-app.all("api/auth/*splat", toNodeHandler(auth));
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
 /* DEBUG MIDDLEWARE */
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path} = Origin: ${req.headers.origin}`);
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  console.log("Origin:", req.headers.origin);
+  console.log("Cookie header:", req.headers.cookie);
   next();
 });
+
+/* BETTER AUTH */
+app.all("api/auth/*splat", toNodeHandler(auth));
 
 /* ROUTES */
 app.use("/api/auth", meRouter);

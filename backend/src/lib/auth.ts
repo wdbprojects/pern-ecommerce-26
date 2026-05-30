@@ -12,20 +12,18 @@ export const auth = betterAuth({
   }),
   baseUrl: ENV.BETTER_AUTH_URL,
   secret: ENV.BETTER_AUTH_SECRET,
-  trustedOrigins: [ENV.FRONTEND_URL, "https://pern-ecommerce-26.vercel.app"],
+  trustedOrigins: [ENV.FRONTEND_URL],
   // cross-domain cookies
   advanced: {
     cookiePrefix: "ecommerce26",
-    crossSubDomainCookies: { enabled: false },
     defaultCookies: {
       session_token: {
-        name: "auth_session",
+        name: "better_auth_session",
         options: {
           httpOnly: true,
           secure: ENV.NODE_ENV === "production",
           sameSite: "lax",
           path: "/",
-          domain: ENV.NODE_ENV === "production" ? "onrender.com" : undefined,
         },
       },
     },
