@@ -5,24 +5,69 @@ import SignOutButton from "../auth/sign-out-button";
 import AppLogo from "@/components/shared/app-logo";
 import LoginButton from "../auth/login-button";
 import { Badge } from "@/components/ui/badge";
-import { useSession } from "@/hooks/use-session";
-import { Skeleton } from "@/components/ui/skeleton";
 // import { getSession } from "@/lib/auth-utils";
+// import { useSession } from "@/hooks/use-session";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Lock, Package, ShoppingBag, ShoppingCart } from "lucide-react";
+import Link from "next/link";
+import { routes } from "@/config/routes";
+import { cn } from "@/lib/utils";
+import { useCart } from "@/store/cart";
+import { CartState } from "@/config/types";
 
 const HeaderDashboard = () => {
   // const session = await getSession();
-  const { session, isLoading } = useSession();
+  // const { session, isLoading } = useSession();
+
+  const getSession = async () => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/get-session`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch user session");
+    }
+    return response.json();
+  };
+
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["session"],
+    queryFn: getSession,
+    retry: false,
+    refetchOnWindowFocus: true,
+    placeholderData: (previousData) => previousData,
+    enabled: true,
+  });
+
+  const cartCount = useCart((state: CartState) => {
+    return state.items.reduce((n, line) => {
+      return n + line.quantity;
+    }, 0);
+  });
+
+  const handleResetProducts = useCart((state: CartState) => {
+    return state.removeItem;
+  });
 
   if (isLoading) {
     return (
       <header className="bg-background fixed top-0 right-0 z-50 h-auto w-full border-b px-2 py-2">
         <div className="container mx-auto flex w-full items-center justify-between gap-1 sm:gap-2">
-          {/* // MENU & LOGO  & NAV LINKS */}
           <AppLogo />
-          <div className="flex shrink-0 items-center gap-4 p-1">
-            <Skeleton className="h-8 w-20" />
-            <Skeleton className="h-8 w-8 rounded-full" />
-            <Skeleton className="h-10 w-24" />
+          <div className="flex shrink-0 items-center gap-2 p-1">
+            <Skeleton className="h-6 w-20" />
+            <Skeleton className="h-6 w-20" />
+            <Skeleton className="h-6 w-20" />
+            <Skeleton className="h-6 w-22" />
+            <Skeleton className="h-5 w-9 rounded-lg" />
           </div>
         </div>
       </header>
@@ -36,16 +81,54 @@ const HeaderDashboard = () => {
         <AppLogo />
         {/* // AUTH & BUTTONS */}
         <div className="flex shrink-0 items-center gap-4 p-1">
-          {session && (
-            <div>
-              <span className="text-muted-foreground text-xs">Signed as: </span>
-              <Badge variant="default">
-                {session?.user?.role?.toUpperCase()}
-              </Badge>
-            </div>
+          {data?.session && data?.user?.role === "admin" && (
+            <Button
+              size="sm"
+              variant="secondary"
+              className="flex items-center justify-center gap-2"
+            >
+              <Lock className="size-3.5" />
+              <span>Admin</span>
+            </Button>
           )}
+          <Button
+            size="sm"
+            variant="outline"
+            className="flex items-center justify-center gap-2"
+          >
+            <ShoppingBag className="size-3.5" />
+            <span>Shop</span>
+          </Button>
+
+          <Button
+            size="sm"
+            variant="outline"
+            className="flex items-center justify-center gap-2"
+          >
+            <Package className="size-3.5" />
+            <span>Orders</span>
+          </Button>
+
+          <Link
+            href={routes.admin}
+            className={cn(
+              `indicator relative flex cursor-pointer items-center justify-between gap-2 rounded-md`,
+              buttonVariants({
+                variant: "outline",
+                size: "sm",
+              }),
+            )}
+            aria-label={cartCount > 0 ? `Cart, ${cartCount} items.` : "Cart"}
+          >
+            <ShoppingCart className="mr-0.5 size-4.5" />
+            <Badge variant="default" className="rounded-md px-1! text-xs">
+              {cartCount > 99 ? 99 : cartCount}
+              {cartCount > 99 && <sup className="">+</sup>}
+            </Badge>
+          </Link>
+
+          {!data?.session ? <LoginButton /> : <SignOutButton />}
           <DarkMode />
-          {!session ? <LoginButton /> : <SignOutButton />}
         </div>
       </div>
     </header>
