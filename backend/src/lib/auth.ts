@@ -13,6 +13,14 @@ export const auth = betterAuth({
   baseUrl: ENV.BETTER_AUTH_URL,
   secret: ENV.BETTER_AUTH_SECRET,
   trustedOrigins: [ENV.FRONTEND_URL],
+  disableSecurePrefix: true,
+
+  cookieOptions: {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+  },
   // cross-domain cookies
   advanced: {
     cookiePrefix: "ecommerce26",
@@ -35,17 +43,6 @@ export const auth = betterAuth({
     autoSignIn: true,
     minPasswordLength: 8,
   },
-
-  // cookies: {
-  //   session: {
-  //     attributes: {
-  //       httpOnly: true,
-  //       sameSite: "lax",
-  //       secure: false,
-  //       path: "/",
-  //     },
-  //   },
-  // },
   plugins: [
     admin({
       defaultRole: "customer",
