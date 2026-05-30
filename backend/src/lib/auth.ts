@@ -21,8 +21,8 @@ export const auth = betterAuth({
         name: "better_auth_session",
         options: {
           httpOnly: true,
-          secure: ENV.NODE_ENV === "production",
-          sameSite: "lax",
+          secure: ENV.NODE_ENV === "production" ? true : false,
+          sameSite: ENV.NODE_ENV === "production" ? "none" : "lax",
           path: "/",
         },
       },

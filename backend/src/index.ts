@@ -33,6 +33,8 @@ app.use(
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization", "Cookie", "Set-Cookie"],
     exposedHeaders: ["Set-Cookie"],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   }),
 );
 app.use(express.json());
