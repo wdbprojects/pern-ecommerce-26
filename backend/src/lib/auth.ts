@@ -10,9 +10,9 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
-  // baseUrl: ENV.BASE_URL,
+  baseUrl: ENV.BETTER_AUTH_URL,
   secret: ENV.BETTER_AUTH_SECRET,
-  trustedOrigins: [ENV.FRONTEND_URL],
+  trustedOrigins: [ENV.FRONTEND_URL, "https://pern-ecommerce-26.vercel.app"],
   // cross-domain cookies
   advanced: {
     cookiePrefix: "ecommerce26",
@@ -25,7 +25,7 @@ export const auth = betterAuth({
           secure: ENV.NODE_ENV === "production",
           sameSite: "lax",
           path: "/",
-          domain: ENV.NODE_ENV === "production" ? ".onrender.com" : undefined,
+          domain: ENV.NODE_ENV === "production" ? "onrender.com" : undefined,
         },
       },
     },

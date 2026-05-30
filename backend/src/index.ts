@@ -31,16 +31,32 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ENV.FRONTEND_URL,
+    origin: [ENV.FRONTEND_URL, "https://pern-ecommerce-26.vercel.app"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "Set-Cookie"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Cookie",
+      "Set-Cookie",
+      "X-Requested-With",
+    ],
     exposedHeaders: ["Set-Cookie"],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   }),
 );
 
+app.options("*", cors());
+
 /* BETTER AUTH */
 app.all("api/auth/*splat", toNodeHandler(auth));
+
+/* DEBUG MIDDLEWARE */
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path} = Origin: ${req.headers.origin}`);
+  next();
+});
 
 /* ROUTES */
 app.use("/api/auth", meRouter);
