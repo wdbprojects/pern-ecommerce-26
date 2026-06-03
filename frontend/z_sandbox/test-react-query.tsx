@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton";
+/* import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { getCategories } from "@/server/categories";
 import { useQuery } from "@tanstack/react-query";
@@ -28,3 +28,4 @@ const TestReactQuery = () => {
 };
 
 export default TestReactQuery;
+ */

@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { routes } from "@/config/routes";
-import { TestingSelect } from "@/modules/components/home/testing-select";
 import Link from "next/link";
 
 const AboutPage = () => {
@@ -14,7 +13,6 @@ const AboutPage = () => {
       <Button variant="outline" size="sm">
         <Link href={routes.dashboard}>Dashboard</Link>
       </Button>
-      <TestingSelect />
     </div>
   );
 };
