@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 const app = express();
 import { toNodeHandler, fromNodeHeaders } from "better-auth/node";
 import { auth } from "./lib/auth";
@@ -16,6 +16,8 @@ import streamRouter from "./routes/stream.router";
 import checkoutRouter from "./routes/checkout.router";
 import adminRouter from "./routes/admin.router";
 import orderRouter from "./routes/order.router";
+import { notFoundMiddleware } from "./middlewares/not-found";
+import { errorHandlerMiddleware } from "./middlewares/error-handler";
 
 const ENV = getEnv();
 const rawJson = express.raw({ type: "application/json", limit: "1mb" });
@@ -42,12 +44,13 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 /* DEBUG MIDDLEWARE */
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
-  console.log("Origin:", req.headers.origin);
-  console.log("Cookie header:", req.headers.cookie);
-  next();
-});
+/* app.use((req, res, next) => {
+	console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+	console.log("Origin:", req.headers.origin);
+	console.log("Cookie header:", req.headers.cookie);
+	next();
+}); */
+// http://localhost:5000/api/auth/sign-in/email
 
 /* BETTER AUTH */
 app.all("api/auth/*splat", toNodeHandler(auth));
@@ -74,14 +77,10 @@ app.get("/", (req, res) => {
   });
 });
 
-// TODO: add middleware to handle errors
-// app.use(
-//   (err: Error, _req: Request, res: Response, _next: NextFunction) => {
-//     res.status(500).json({
-//       error: "Internal server error",
-//     });
-//   },
-// );
+// ERROR HANDLER MIDDLEWARE
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
+
 /* SERVER LISTEN */
 app.listen(ENV.PORT, () => {
   console.log(`Server is running on port ${ENV.PORT}`);

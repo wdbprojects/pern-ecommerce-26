@@ -7,4 +7,7 @@ export const routes = {
   /* AUTH */
   login: "/auth/login",
   register: "/auth/register",
+  /* ECOMMERCE */
+  catalog: "/products/catalog",
+  cart: "/products/cart",
 };

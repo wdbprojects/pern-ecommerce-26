@@ -1,45 +1,52 @@
 "use client";
 
-import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Loader2, LogOut } from "lucide-react";
 import { toast } from "sonner";
-import { authClient } from "@/lib/auth-client";
 import { routes } from "@/config/routes";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+const signOutUser = async () => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-out`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  const result = await response.json();
+  if (!response.ok || !result.success) {
+    throw new Error(
+      result.message || result.error || "Sign out failed, please try again!",
+    );
+  }
+  return result;
+};
 const SignOutButton = () => {
-  const [pendingLogout, startLogoutTransition] = useTransition();
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  /*   const handleLogout = () => {
-    startLogoutTransition(async () => {
-      await signOut({
-        fetchOptions: {
-          onError: (ctx) => {
-            toast.error(ctx.error.message);
-          },
-          onSuccess: () => {
-            toast.info("User signed out successfully");
-            router.push(routes.home);
-            router.refresh();
-          },
-        },
-      });
-    });
-  }; */
-
-  const handleSignOut = () => {
-    startLogoutTransition(async () => {
-      await authClient.signOut();
+  // USE QUERY MUTATION
+  const signOutMutation = useMutation({
+    mutationFn: signOutUser,
+    onSuccess: (data) => {
       queryClient.clear();
+      toast.success(data.message || "Signed out successfully");
       router.push(routes.login);
       router.refresh();
-      toast.info("User signed out successfully");
-    });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const handleSignOut = () => {
+    signOutMutation.mutate();
   };
 
   return (
@@ -47,11 +54,10 @@ const SignOutButton = () => {
       variant="destructive"
       size="sm"
       className=""
-      // onClick={handleLogout}
       onClick={handleSignOut}
-      disabled={pendingLogout}
+      disabled={signOutMutation.isPending}
     >
-      {pendingLogout ? (
+      {signOutMutation.isPending ? (
         <div className="flex items-center justify-center gap-2">
           <Loader2 className="size-3.5 animate-spin" />
           <span>Pending...</span>

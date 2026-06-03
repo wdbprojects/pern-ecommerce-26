@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentProps, useTransition } from "react";
+import { ComponentProps } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,32 +57,6 @@ const LoginForm = ({ className, ...props }: ComponentProps<"div">) => {
     },
   });
   const { handleSubmit, control, reset } = form;
-
-  /*   const onSubmit = (data: LoginSchemaType) => {
-    startLoginTransition(async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-in/email`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        },
-      );
-      const res = await response.json();
-      if (res.success) {
-        toast.success(`${res.message}`);
-        reset();
-        router.push(routes.home);
-      } else {
-        toast.error(
-          res.message || res.error || "Unknown error, try again later!!!",
-        );
-      }
-    });
-  }; */
 
   // TanStack Query Mutation
   const loginMutation = useMutation({

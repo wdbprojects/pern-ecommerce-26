@@ -12,7 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Lock, Package, ShoppingBag, ShoppingCart } from "lucide-react";
+import { Gauge, Lock, Package, ShoppingBag, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { routes } from "@/config/routes";
@@ -49,11 +49,13 @@ const HeaderMain = () => {
     enabled: true,
   });
 
-  const cartCount = useCart((state: CartState) => {
-    return state.items.reduce((n, line) => {
-      return n + line.quantity;
-    }, 0);
-  });
+  // const cartCount = useCart((state: CartState) => {
+  //   return state.items.reduce((n, line) => {
+  //     return n + line.quantity;
+  //   }, 0);
+  // });
+
+  const cartCount = 69;
 
   const handleResetProducts = useCart((state: CartState) => {
     return state.removeItem;
@@ -75,7 +77,7 @@ const HeaderMain = () => {
       </header>
     );
   }
-  console.log({ cartCount });
+
   return (
     <header className="bg-background fixed top-0 right-0 z-50 h-auto w-full border-b px-2 py-2">
       <div className="container mx-auto flex w-full items-center justify-between gap-1 sm:gap-2">
@@ -109,6 +111,20 @@ const HeaderMain = () => {
               <span>Admin</span>
             </Button>
           )}
+          <Link
+            href={routes.dashboard}
+            className={cn(
+              "flex items-center justify-center gap-2",
+              buttonVariants({
+                variant: "outline",
+                size: "sm",
+              }),
+            )}
+          >
+            <Gauge className="size-3.5" />
+            <span>Dashboard</span>
+          </Link>
+
           <Button
             size="sm"
             variant="outline"

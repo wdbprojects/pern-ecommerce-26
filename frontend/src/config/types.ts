@@ -21,3 +21,8 @@ export interface CartState {
   setQuantity: (productId: string, quantity: number) => void;
   // getTotalPrice: () => void;
 }
+
+export interface ICategories {
+  categories: string | string[] | null;
+  loadingCategories: boolean;
+}

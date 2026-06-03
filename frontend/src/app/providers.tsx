@@ -1,6 +1,6 @@
 "use client";
 
-import { QueryProvider } from "@/components/query-provider";
+import { TanstackProvider } from "@/components/tanstack-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { LayoutPropsMain } from "@/config/types";
@@ -14,8 +14,8 @@ const Providers = ({ children }: LayoutPropsMain) => {
       disableTransitionOnChange
     >
       <div>
-        <NextTopLoader showSpinner={false} color="#3b82f6" />
-        <QueryProvider>{children}</QueryProvider>
+        <NextTopLoader showSpinner={false} color="#7ccf00" />
+        <TanstackProvider>{children}</TanstackProvider>
         <Toaster richColors closeButton position="bottom-right" expand={true} />
       </div>
     </ThemeProvider>

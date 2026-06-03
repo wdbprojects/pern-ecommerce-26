@@ -43,7 +43,7 @@ export const requireUnauth = async (path: keyof typeof routes) => {
 const base = process.env.NEXT_PUBLIC_API_URL;
 
 // API FETCH
-export const apiFetch = async (
+/* export const apiFetch = async (
   path: string,
   opts: { method?: string; body?: FormData } = {},
 ) => {
@@ -64,4 +64,4 @@ export const apiFetch = async (
   } catch (error) {
     console.error(error);
   }
-};
+}; */
