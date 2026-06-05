@@ -1,7 +1,9 @@
 "use client";
 
 import { useHomeCatalog } from "@/hooks/use-home-catalog";
+import HomeCatalog from "@/modules/components/home/home-catalog";
 import HomeHero from "@/modules/components/home/home-hero";
+import TrustStrip from "@/modules/components/home/trust-strip";
 
 const HomePage = () => {
   const {
@@ -17,7 +19,20 @@ const HomePage = () => {
 
   return (
     <div className="space-y-12 p-4">
+      {/* HERO */}
       <HomeHero categories={categories} loadingCategories={loadingCategories} />
+      {/* TRUST STRIP */}
+      <TrustStrip />
+      {/* CATALOG */}
+      <HomeCatalog
+        categoryFilter={categoryFilter}
+        categoryChipsLoading={categoryChipsLoading}
+        categories={categories}
+        setCategory={setCategory}
+        error={error}
+        products={products}
+        loadingProducts={loadingProducts}
+      />
     </div>
   );
 };

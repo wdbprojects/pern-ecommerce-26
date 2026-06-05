@@ -9,7 +9,3 @@ const LoadingPage = async () => {
 };
 
 export default LoadingPage;
-
-{
-  /* <CircleDashed color="#fa7f26" strokeWidth={1.25} /> */
-}

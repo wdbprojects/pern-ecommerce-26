@@ -10,4 +10,5 @@ export const routes = {
   /* ECOMMERCE */
   catalog: "/products/catalog",
   cart: "/products/cart",
+  orders: "/products/orders",
 };

@@ -19,7 +19,7 @@ export const useHomeCatalog = () => {
     } else {
       next.set("category", category);
     }
-    router.replace(`${pathname}?${next.toString()}`);
+    router.replace(`${pathname}?${next.toString().toLowerCase()}`);
   };
 
   /* GET CATEGORIES */
@@ -32,7 +32,7 @@ export const useHomeCatalog = () => {
   const {
     data: productsData,
     isLoading: loadingProducts,
-    error,
+    error: error,
   } = useQuery({
     queryKey: ["products", categoryFilter],
     queryFn: () => {

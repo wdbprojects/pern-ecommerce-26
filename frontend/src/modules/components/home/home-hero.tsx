@@ -7,12 +7,12 @@ import { routes } from "@/config/routes";
 import { ICategories } from "@/config/types";
 import { cn } from "@/lib/utils";
 
-import { ArrowRightIcon, BaggageClaim, SparkleIcon } from "lucide-react";
+import { ArrowRightIcon, ShoppingCart, SparkleIcon } from "lucide-react";
 import Link from "next/link";
 
 const HomeHero = ({ categories, loadingCategories }: ICategories) => {
   return (
-    <section className="rounded-box border-base-300 from-base-100 via-base-100 to-primary/10 relative overflow-hidden border bg-linear-to-br shadow-lg">
+    <section className="border-base-300 from-base-100 via-base-100 to-primary/10 relative overflow-hidden rounded-md border bg-linear-to-br shadow-lg">
       <div
         className="bg-primary/10 absolute top-0 right-0 h-64 w-64 translate-x-1/4 -translate-y-1/4 rounded-full blur-3xl"
         aria-hidden
@@ -52,7 +52,7 @@ const HomeHero = ({ categories, loadingCategories }: ICategories) => {
               )}
             >
               <span>View Cart</span>
-              <BaggageClaim className="size-3.5" />
+              <ShoppingCart className="size-3.5" />
             </Link>
           </div>
         </div>
