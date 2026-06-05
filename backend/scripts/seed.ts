@@ -9,7 +9,7 @@ const CATALOG = [
   {
     slug: "aurora-headphones",
     name: "Aurora ANC Headphones",
-    category: "Audio",
+    category: "audio",
     description:
       "Hybrid active noise cancellation, 40mm titanium drivers, 32-hour battery (ANC on), multipoint Bluetooth 5.3, fold-flat case included. Tuned for balanced mids — ideal for travel and focused work.",
     priceCents: 24900,
@@ -19,7 +19,7 @@ const CATALOG = [
   {
     slug: "nova-watch",
     name: "Nova Smart Watch Pro",
-    category: "Wearables",
+    category: "wearables",
     description:
       'Always-on AMOLED 1.4", SpO₂ & ECG-ready sensors, sleep stages, 5 ATM swim-proof, 18-day battery in saver mode. GPS + GLONASS for outdoor workouts.',
     priceCents: 19900,
@@ -29,7 +29,7 @@ const CATALOG = [
   {
     slug: "pulse-speaker",
     name: "Pulse Go Speaker",
-    category: "Audio",
+    category: "audio",
     description:
       "360° sound with dual passive radiators, IP67 dust/water, 14h playtime, stereo pairing. USB-C fast charge — party-ready footprint.",
     priceCents: 8900,
@@ -39,7 +39,7 @@ const CATALOG = [
   {
     slug: "vertex-laptop-stand",
     name: "Vertex Aluminum Stand",
-    category: "Workspace",
+    category: "workspace",
     description:
       'Ergonomic 6-step height, silicone pads, supports up to 10 kg. Folds flat for commute. Fits 11–17" laptops.',
     priceCents: 7900,
@@ -49,7 +49,7 @@ const CATALOG = [
   {
     slug: "lumen-keyboard",
     name: "Lumen Mechanical Keyboard",
-    category: "Workspace",
+    category: "workspace",
     description:
       "Hot-swappable linear switches, PBT keycaps, gasket mount, tri-mode (USB-C / BT / 2.4G). Per-key RGB with onboard profiles.",
     priceCents: 15900,
@@ -59,7 +59,7 @@ const CATALOG = [
   {
     slug: "orbit-mouse",
     name: "Orbit Ergo Mouse",
-    category: "Workspace",
+    category: "workspace",
     description:
       "Vertical 57° grip, silent main buttons, 4000 DPI sensor, 70-day battery, USB-C. Reduces wrist pronation during long sessions.",
     priceCents: 6900,
@@ -69,7 +69,7 @@ const CATALOG = [
   {
     slug: "cascade-monitor-lamp",
     name: "Cascade Monitor Light Bar",
-    category: "Workspace",
+    category: "workspace",
     description:
       "Asymmetric optics avoid screen glare, RA>95, auto-dimming via ambient sensor. Touch controls + warm/cool CCT presets.",
     priceCents: 9900,
@@ -79,7 +79,7 @@ const CATALOG = [
   {
     slug: "ember-kettle",
     name: "Ember Smart Kettle",
-    category: "Home",
+    category: "home",
     description:
       "Variable temperature 40–100°C, keep-warm 2h, stainless interior, boil-dry protection. App scheduling (Wi‑Fi).",
     priceCents: 12900,
@@ -89,7 +89,7 @@ const CATALOG = [
   {
     slug: "linen-air-purifier",
     name: "Linen HEPA Air Purifier",
-    category: "Home",
+    category: "home",
     description:
       "CADR 350 m³/h, H13 HEPA + carbon, whisper 24 dB sleep mode, filter life indicator. Rooms up to 40 m².",
     priceCents: 22900,
@@ -99,7 +99,7 @@ const CATALOG = [
   {
     slug: "summit-backpack",
     name: "Summit 28L Backpack",
-    category: "Travel",
+    category: "travel",
     description:
       'Weatherproof shell, lay-flat laptop compartment (16"), luggage pass-through, recycled ripstop. 980 g.',
     priceCents: 13900,
@@ -109,7 +109,7 @@ const CATALOG = [
   {
     slug: "voyage-organizer",
     name: "Voyage Tech Organizer",
-    category: "Travel",
+    category: "travel",
     description:
       "Ripstop panels, elastic grids for cables & adapters, RFID pocket, slim profile for carry-on.",
     priceCents: 4500,
@@ -119,7 +119,7 @@ const CATALOG = [
   {
     slug: "apex-mirrorless",
     name: "Apex Mirrorless Body",
-    category: "Cameras",
+    category: "cameras",
     description:
       "24 MP BSI sensor, 4K60 10-bit internal, 5-axis IBIS, dual SD. Weather-sealed magnesium chassis — body only.",
     priceCents: 149900,
@@ -129,7 +129,7 @@ const CATALOG = [
   {
     slug: "prime-lens-35",
     name: "Prime 35mm f/1.4",
-    category: "Cameras",
+    category: "cameras",
     description:
       "Nano-coated elements, linear AF motor, 0.25 m close focus, 67 mm filter thread. Street & low-light staple.",
     priceCents: 79900,
@@ -139,7 +139,7 @@ const CATALOG = [
   {
     slug: "nimbus-hub",
     name: "Nimbus USB-C Hub",
-    category: "Accessories",
+    category: "accessories",
     description:
       "2× USB-A 10 Gbps, HDMI 2.1 4K120, SD/microSD UHS-II, 100 W PD passthrough. Aluminum unibody, braided cable.",
     priceCents: 7900,
@@ -149,7 +149,7 @@ const CATALOG = [
   {
     slug: "solstice-power-bank",
     name: "Solstice 20K Power Bank",
-    category: "Accessories",
+    category: "accessories",
     description:
       "20000 mAh, 140 W PD PPS, dual USB-C + USB-A, airline-safe. OLED charge readout, soft-touch shell.",
     priceCents: 8900,
@@ -159,7 +159,7 @@ const CATALOG = [
   {
     slug: "echo-earbuds",
     name: "Echo True Wireless",
-    category: "Audio",
+    category: "audio",
     description:
       "Adaptive ANC, spatial audio, 8h buds + 28h case, wireless charging. IPX4 sweat resistance.",
     priceCents: 17900,
@@ -169,7 +169,7 @@ const CATALOG = [
   {
     slug: "meridian-desk-mat",
     name: "Meridian Desk Mat XL",
-    category: "Workspace",
+    category: "workspace",
     description:
       "900×400 mm vegan leather surface, anti-slip base, stitched edges. Coffee & pen safe.",
     priceCents: 5900,
@@ -179,7 +179,7 @@ const CATALOG = [
   {
     slug: "atlas-water-bottle",
     name: "Atlas Insulated Bottle",
-    category: "Travel",
+    category: "travel",
     description:
       "32 oz vacuum stainless, 24h cold / 12h hot, powder coat, leakproof chug cap + optional straw.",
     priceCents: 3900,

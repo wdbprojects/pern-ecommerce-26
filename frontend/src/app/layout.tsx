@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
-import { Nunito_Sans, DM_Sans, IBM_Plex_Sans } from "next/font/google";
+import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import Providers from "@/app/providers";
 import { cn } from "@/lib/utils";
 
-const ibmPlexSans = IBM_Plex_Sans({subsets:['latin'],variable:'--font-sans'});
-
-const nunitoSans = Nunito_Sans({
-  style: ["normal", "italic"],
+const ibmPlexSans = IBM_Plex_Sans({
   subsets: ["latin"],
-  display: "swap",
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
-  title: "New App Name Here",
-  description: "Explain what the app is all about",
+  title: "Ecommerce26",
+  description:
+    "Ecommerce application made with PERN stack, Next.js, and Tailwind CSS.",
 };
 
 export default function RootLayout({
@@ -23,8 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("font-sans", ibmPlexSans.variable)}>
-      <body className={`${nunitoSans.className} antialiased`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn("font-sans", ibmPlexSans.variable)}
+    >
+      <body className={`antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>
