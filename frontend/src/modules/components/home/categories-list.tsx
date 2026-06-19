@@ -25,7 +25,7 @@ const CategoriesList = ({
         All
       </Button>
       {categoryChipsLoading
-        ? [1, 2, 3, 4].map((i) => {
+        ? [1, 2, 3, 4, 5, 6].map((i) => {
             return (
               <Skeleton key={i} className="h-7 w-20 rounded-lg" aria-hidden />
             );

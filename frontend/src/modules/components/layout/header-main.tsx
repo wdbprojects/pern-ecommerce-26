@@ -1,45 +1,23 @@
 "use client";
 
+import DarkMode from "@/components/shared/dark-mode";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { routes } from "@/config/routes";
+
+import { getSession } from "@/lib/auth-utils";
 import LoginButton from "@/modules/components/auth/login-button";
 import SignOutButton from "../auth/sign-out-button";
 
-import DarkMode from "@/components/shared/dark-mode";
+import { cn } from "@/lib/utils";
 import AppLogo from "@/components/shared/app-logo";
 import { Badge } from "@/components/ui/badge";
-// import { getSession } from "@/lib/auth-utils";
-// import { useSession } from "@/hooks/use-session";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Gauge, Lock, Package, ShoppingBag, ShoppingCart } from "lucide-react";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { routes } from "@/config/routes";
 import { useCart } from "@/store/cart";
-import { CartState } from "@/config/types";
 
 const HeaderMain = () => {
-  // const session = await getSession();
-  // const { session, isLoading } = useSession();
-
-  const getSession = async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/get-session`,
-      {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch user session");
-    }
-    return response.json();
-  };
-
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["session"],
     queryFn: getSession,
@@ -49,16 +27,10 @@ const HeaderMain = () => {
     enabled: true,
   });
 
-  // const cartCount = useCart((state: CartState) => {
-  //   return state.items.reduce((n, line) => {
-  //     return n + line.quantity;
-  //   }, 0);
-  // });
-
-  const cartCount = 69;
-
-  const handleResetProducts = useCart((state: CartState) => {
-    return state.removeItem;
+  const cartCount = useCart((state) => {
+    return state.items.reduce((num, line) => {
+      return num + line.quantity;
+    }, 0);
   });
 
   if (isLoading) {
@@ -85,20 +57,15 @@ const HeaderMain = () => {
         <AppLogo />
         {/* // AUTH & BUTTONS */}
         <div className="flex shrink-0 items-center gap-2 p-1">
-          {/* {data?.session && (
+          {data?.session && (
             <div>
               <span className="text-muted-foreground text-xs">Signed as: </span>
               <span className="text-muted-foreground text-xs font-bold">
                 {data?.user?.role}
               </span>
             </div>
-          )} */}
-          <Button
-            variant="destructive"
-            onClick={() => {
-              handleResetProducts("sdf");
-            }}
-          >
+          )}
+          <Button variant="destructive" size="sm" onClick={() => {}}>
             Reset Products
           </Button>
           {data?.session && data?.user?.role === "admin" && (
@@ -144,7 +111,7 @@ const HeaderMain = () => {
           </Button>
 
           <Link
-            href={routes.admin}
+            href={routes.cart}
             className={cn(
               `indicator relative flex cursor-pointer items-center justify-between gap-2 rounded-md`,
               buttonVariants({
@@ -152,7 +119,7 @@ const HeaderMain = () => {
                 size: "sm",
               }),
             )}
-            aria-label={cartCount > 0 ? `Cart, ${cartCount} items.` : "Cart"}
+            // aria-label={cartCount > 0 ? `Cart, ${cartCount} items.` : "Cart"}
           >
             <ShoppingCart className="mr-0.5 size-4.5" />
             <Badge variant="default" className="rounded-md px-1! text-xs">
@@ -161,7 +128,11 @@ const HeaderMain = () => {
             </Badge>
           </Link>
 
-          {!data?.session ? <LoginButton /> : <SignOutButton />}
+          {!data?.session ? (
+            <LoginButton variant="secondary" />
+          ) : (
+            <SignOutButton />
+          )}
           <DarkMode />
         </div>
       </div>

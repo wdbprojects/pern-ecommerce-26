@@ -5,8 +5,6 @@ import SignOutButton from "../auth/sign-out-button";
 import AppLogo from "@/components/shared/app-logo";
 import LoginButton from "../auth/login-button";
 import { Badge } from "@/components/ui/badge";
-// import { getSession } from "@/lib/auth-utils";
-// import { useSession } from "@/hooks/use-session";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -15,12 +13,8 @@ import Link from "next/link";
 import { routes } from "@/config/routes";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/store/cart";
-import { CartState } from "@/config/types";
 
 const HeaderDashboard = () => {
-  // const session = await getSession();
-  // const { session, isLoading } = useSession();
-
   const getSession = async () => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/auth/get-session`,
@@ -47,14 +41,10 @@ const HeaderDashboard = () => {
     enabled: true,
   });
 
-  const cartCount = useCart((state: CartState) => {
-    return state.items.reduce((n, line) => {
-      return n + line.quantity;
+  const cartCount = useCart((state) => {
+    return state.items.reduce((num, line) => {
+      return num + line.quantity;
     }, 0);
-  });
-
-  const handleResetProducts = useCart((state: CartState) => {
-    return state.removeItem;
   });
 
   if (isLoading) {
@@ -127,7 +117,11 @@ const HeaderDashboard = () => {
             </Badge>
           </Link>
 
-          {!data?.session ? <LoginButton /> : <SignOutButton />}
+          {!data?.session ? (
+            <LoginButton variant="secondary" />
+          ) : (
+            <SignOutButton />
+          )}
           <DarkMode />
         </div>
       </div>

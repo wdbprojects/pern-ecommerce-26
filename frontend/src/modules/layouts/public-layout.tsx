@@ -4,9 +4,9 @@ import FooterMain from "../components/layout/footer-main";
 
 const PublicLayout = ({ children }: LayoutPropsMain) => {
   return (
-    <div>
+    <div className="flex h-screen flex-col pt-12">
       <HeaderMain />
-      <main className="container mx-auto pt-12">{children}</main>
+      <main className="container mx-auto flex-1">{children}</main>
       <FooterMain />
     </div>
   );

@@ -9,6 +9,6 @@ export const routes = {
   register: "/auth/register",
   /* ECOMMERCE */
   catalog: "/products/catalog",
-  cart: "/products/cart",
+  cart: "/cart",
   orders: "/products/orders",
 };

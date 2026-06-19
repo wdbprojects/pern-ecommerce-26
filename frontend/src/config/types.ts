@@ -15,7 +15,7 @@ export interface CartItem {
 
 export interface CartState {
   items: CartItem[];
-  addItem: (item: CartItem, quantity: number) => void;
+  addItem: (productId: string, quantity: number) => void;
   removeItem: (productId: string) => void;
   clearCart: () => void;
   setQuantity: (productId: string, quantity: number) => void;
@@ -28,14 +28,42 @@ export interface ICategories {
 }
 
 export interface IProducts {
-  id: string;
-  slug: string;
-  name: string;
-  category: string;
-  description: string;
-  priceCents: number;
-  currency: string;
-  imageUrl: string;
-  imageKitFileId: string | null;
   active: boolean;
+  category: string;
+  createdAt: string;
+  currency: string;
+  description: string;
+  id: string;
+  imageKitFileId: string | null;
+  imageUrl: string;
+  name: string;
+  priceCents: number;
+  slug: string;
+}
+
+export type TBody = {
+  items: {
+    productId: string;
+    quantity: number;
+  }[];
+};
+
+export interface ICartItem {
+  productId: string;
+  quantity: number;
+}
+export interface ICartLine {
+  line: {
+    productId: string;
+    quantity: number;
+  };
+  product: IProducts | null;
+}
+export interface ICartItemProps {
+  lines: ICartLine[];
+  setQty: (productId: string, quantity: number) => void;
+  removeItem: (productId: string) => void;
+  subtotal: number;
+  checkout: () => void;
+  checkoutLoading: boolean;
 }

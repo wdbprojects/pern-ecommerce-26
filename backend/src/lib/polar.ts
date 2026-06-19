@@ -1,4 +1,3 @@
-import { string } from "zod";
 import type { Env } from "../config/env";
 
 type CheckoutCreateBody = {

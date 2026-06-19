@@ -6,7 +6,7 @@ import React from "react";
 
 const FooterMain = () => {
   return (
-    <div className="bg-muted/20 z-50 mt-20 h-auto w-full border-t px-4 py-6">
+    <div className="bg-muted/20 z-50 h-auto w-full border-t px-4 py-6">
       <div className="container mx-auto">
         <div className="grid gap-10 md:grid-cols-4">
           <div>
