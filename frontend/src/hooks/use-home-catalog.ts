@@ -1,6 +1,6 @@
 "use client";
 
-import { apiFetch } from "../lib/api";
+import { apiFetch } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 

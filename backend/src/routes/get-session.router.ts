@@ -10,8 +10,9 @@ router.get("/get-session", async (req, res, next) => {
       headers: fromNodeHeaders(req.headers),
     });
     if (!session) {
-      return res.status(401).json({ error: "No active session!!!" });
+      return res.status(200).json({ error: "No active session!!!" });
     }
+
     return res.json(session);
   } catch (error) {
     console.error(error);

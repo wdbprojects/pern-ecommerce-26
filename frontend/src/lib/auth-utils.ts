@@ -1,25 +1,22 @@
 import { routes } from "@/config/routes";
-
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 
 // GET SESSION
 export const getSession = async () => {
-  const cookieStore = cookies();
-  const cookieHeader = (await cookieStore)
-    .getAll()
-    .map((cookie) => {
-      return `${cookie.name}=${cookie.value}`;
-    })
-    .join("; ");
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/me`, {
-    cache: "no-store",
-    headers: {
-      cookie: cookieHeader,
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/auth/get-session`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
     },
-  });
-  if (!res.ok) return null;
-  return res.json();
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch user session");
+  }
+  return response.json();
 };
 
 // REQUIRE AUTH
@@ -39,29 +36,3 @@ export const requireUnauth = async (path: keyof typeof routes) => {
   }
   return session;
 };
-
-const base = process.env.NEXT_PUBLIC_API_URL;
-
-// API FETCH
-/* export const apiFetch = async (
-  path: string,
-  opts: { method?: string; body?: FormData } = {},
-) => {
-  const { method = "GET", body } = opts;
-  const headers = { "Content-Type": "application/json" };
-
-  try {
-    const res = await fetch(`${base}${path}`, {
-      method: method,
-      headers: headers,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-    });
-    if (!res.ok) {
-      console.log(`!res.ok: ${res}}`);
-      return null;
-    }
-    return res.json();
-  } catch (error) {
-    console.error(error);
-  }
-}; */

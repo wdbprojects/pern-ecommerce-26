@@ -12,12 +12,16 @@ import {
 import { IProducts } from "@/config/types";
 import { IK_PRESETS, imageKitOptimizedUrl } from "@/lib/image-kit-url";
 import { formatPrice } from "@/lib/utils";
+import { useCart } from "@/store/cart";
 import { PlusIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 const CatalogProductCard = ({ product }: { product: IProducts }) => {
   const { imageUrl } = product;
+  const addItem = useCart((state) => {
+    return state.addItem;
+  });
 
   return (
     <Card className="bg-muted relative mx-auto h-full w-full gap-2 rounded-md px-0 pt-0 ring-0 transition-all hover:shadow-xl">
@@ -61,7 +65,13 @@ const CatalogProductCard = ({ product }: { product: IProducts }) => {
           <span className="text-lg font-bold tabular-nums">
             {formatPrice(product.priceCents, product.currency)}
           </span>
-          <Button onClick={() => {}} variant="default" size="sm">
+          <Button
+            onClick={() => {
+              addItem(product.id, 1);
+            }}
+            variant="default"
+            size="sm"
+          >
             <PlusIcon className="size-4" aria-hidden />
             <span className="font-bold">Add</span>
           </Button>

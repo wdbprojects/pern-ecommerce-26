@@ -9,7 +9,7 @@ import cronJob from "./lib/cron";
 import { polarWebhookHandler } from "./webhooks/polar";
 
 /* ROUTES IMPORTS */
-import meRouter from "./routes/me.router";
+import getSession from "./routes/get-session.router";
 import authRouter from "./routes/auth.router";
 import productRouter from "./routes/product.router";
 import streamRouter from "./routes/stream.router";
@@ -56,7 +56,7 @@ app.use(express.urlencoded({ extended: true }));
 app.all("api/auth/*splat", toNodeHandler(auth));
 
 /* ROUTES */
-app.use("/api/auth", meRouter);
+app.use("/api/auth", getSession);
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
 app.use("/api/stream", streamRouter);

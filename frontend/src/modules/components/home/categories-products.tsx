@@ -1,3 +1,4 @@
+import ErrorCard from "@/components/shared/error-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IProducts } from "@/config/types";
 import CatalogProductCard from "@/modules/components/home/catalog-product-card";
@@ -22,7 +23,7 @@ const CategoriesProducts = ({
       })}
     </ul>
   ) : error ? (
-    "ERROR"
+    <ErrorCard />
   ) : products.length === 0 ? (
     <div className="border-muted bg-muted/30 text-muted-foreground rounded-md border py-16 text-center">
       No products in this category yet!

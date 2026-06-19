@@ -31,13 +31,15 @@ export const createCheckout = async (
     // only sign-in users can start checkout (session)
     const userSession = await getCurrentSession(req.headers);
     if (!userSession) {
-      res.status(401).json({ error: " Unauthorized!!" });
+      res.status(401).json({ error: "Unauthorized!!" });
+      return;
     }
+
     const parsed = cartSchema.safeParse(req.body);
     if (!parsed.success) {
       res
         .status(400)
-        .json({ error: "Invalid cart", details: parsed.error.flatten() });
+        .json({ error: "Invalid cart!!!", details: parsed.error.flatten() });
       return;
     }
     // polar access token required
@@ -78,9 +80,10 @@ export const createCheckout = async (
       });
     }
     if (totalCents < 10) {
-      res
-        .status(400)
-        .json({ error: "Total below minimum (10 cents or above)" });
+      res.status(400).json({
+        error:
+          "Total below Polar minimum (e.g. USD required at least 10 cents)",
+      });
       return;
     }
 
@@ -121,7 +124,6 @@ export const createCheckout = async (
       .update(checkoutSession)
       .set({ polarCheckoutId: checkout.id })
       .where(eq(checkoutSession.id, session.id));
-
     res.json({
       checkoutUrl: checkout.url,
     });
