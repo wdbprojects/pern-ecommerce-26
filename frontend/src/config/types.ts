@@ -41,6 +41,25 @@ export interface IProducts {
   slug: string;
 }
 
+export interface IOrder {
+  id: string;
+  userId: string;
+  polarCheckoutId: string;
+  polarOrderId: string;
+  previewItems: IOrderPreview[];
+  status: string;
+  totalCents: number;
+  updatedAt: string;
+  createdAt: string;
+}
+
+export interface IOrderPreview {
+  imageUrl: string;
+  name: string;
+  quantity: number;
+  slug: string;
+}
+
 export type TBody = {
   items: {
     productId: string;

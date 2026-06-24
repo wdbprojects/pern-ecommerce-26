@@ -4,6 +4,7 @@ import { LoginSchemaType, RegisterSchemaType } from "@/schemas/auth-schemas";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+/* REGISTER ACTION */
 export const registerAction = async (data: RegisterSchemaType) => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/auth/sign-up/email`, {
@@ -40,6 +41,7 @@ export const registerAction = async (data: RegisterSchemaType) => {
   }
 };
 
+/* LOGIN ACTION */
 /* export const loginAction = async (data: LoginSchemaType) => {
   try {
     const response = await fetch(
