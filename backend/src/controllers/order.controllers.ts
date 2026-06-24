@@ -27,6 +27,7 @@ export const getAllOrders = async (
       return;
     }
     const user = session?.user;
+
     const rows = isStaff(user?.role as UserRole)
       ? await db.select().from(order).orderBy(desc(order.createdAt))
       : await db.select().from(order).where(eq(order.userId, user.id));
@@ -56,6 +57,7 @@ export const getAllOrders = async (
           imageUrl: row.imageUrl,
           quantity: row.quantity,
         });
+        previewByOrder.set(row.orderId, list);
       }
     }
     const ordersPayload = rows.map((order) => {

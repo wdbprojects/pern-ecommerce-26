@@ -10,5 +10,8 @@ export const routes = {
   /* ECOMMERCE */
   catalog: "/products/catalog",
   cart: "/cart",
-  orders: "/products/orders",
+  orders: "/orders",
+  orderItem: (id: string) => {
+    return `/order/${id}`;
+  },
 };

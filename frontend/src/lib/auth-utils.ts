@@ -29,10 +29,10 @@ export const requireAuth = async () => {
 };
 
 // REQUIRE UNAUTH
-export const requireUnauth = async (path: keyof typeof routes) => {
+export const requireUnauth = async () => {
   const session = await getSession();
   if (session) {
-    redirect(routes[path]);
+    redirect(routes.home);
   }
   return session;
 };

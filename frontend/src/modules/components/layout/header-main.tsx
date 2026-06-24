@@ -101,14 +101,16 @@ const HeaderMain = () => {
             <span>Shop</span>
           </Button>
 
-          <Button
-            size="sm"
-            variant="outline"
-            className="flex items-center justify-center gap-2"
+          <Link
+            className={cn(
+              "flex items-center justify-center gap-2",
+              buttonVariants({ size: "sm", variant: "outline" }),
+            )}
+            href={routes.orders}
           >
             <Package className="size-3.5" />
             <span>Orders</span>
-          </Button>
+          </Link>
 
           <Link
             href={routes.cart}
