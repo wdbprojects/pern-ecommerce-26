@@ -9,6 +9,10 @@ export const routes = {
   register: "/auth/register",
   /* ECOMMERCE */
   catalog: "/products/catalog",
+  products: "/products",
+  productDetails: (slug: string) => {
+    return `/products/${slug}`;
+  },
   cart: "/cart",
   orders: "/orders",
   orderItem: (id: string) => {

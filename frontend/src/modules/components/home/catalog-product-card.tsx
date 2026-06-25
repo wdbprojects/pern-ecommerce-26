@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { routes } from "@/config/routes";
 import { IProducts } from "@/config/types";
 import { IK_PRESETS, imageKitOptimizedUrl } from "@/lib/image-kit-url";
 import { formatPrice } from "@/lib/utils";
@@ -16,6 +17,7 @@ import { useCart } from "@/store/cart";
 import { PlusIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "sonner";
 
 const CatalogProductCard = ({ product }: { product: IProducts }) => {
   const { imageUrl } = product;
@@ -26,7 +28,10 @@ const CatalogProductCard = ({ product }: { product: IProducts }) => {
   return (
     <Card className="bg-muted relative mx-auto h-full w-full gap-2 rounded-md px-0 pt-0 ring-0 transition-all hover:shadow-xl">
       <div className="p-0">
-        <Link href={`/product/${product.slug}`} className="overflow-hidden">
+        <Link
+          href={routes.productDetails(product.slug)}
+          className="overflow-hidden"
+        >
           <figure className="bg-background aspect-5/3">
             {product.imageUrl ? (
               <Image
@@ -50,7 +55,7 @@ const CatalogProductCard = ({ product }: { product: IProducts }) => {
           <CardHeader className="mb-0 p-0 pb-0">
             <CardTitle className="px-2">
               <Link
-                href={`/product/${product.slug}`}
+                href={routes.productDetails(product.slug)}
                 className="hover:text-primary line-clamp-2 text-base font-light transition-all"
               >
                 {product.name}
@@ -68,6 +73,9 @@ const CatalogProductCard = ({ product }: { product: IProducts }) => {
           <Button
             onClick={() => {
               addItem(product.id, 1);
+              toast.success(
+                `Product "${product.name}" added to cart successfully`,
+              );
             }}
             variant="default"
             size="sm"
