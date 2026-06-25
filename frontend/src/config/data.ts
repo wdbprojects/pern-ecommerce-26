@@ -79,3 +79,9 @@ export const homeTrustStrip = [
     desc: "Order-scoped chat + optional video",
   },
 ];
+
+export const HIGHLIGHTS = [
+  "Secure checkout",
+  "Support from order after payment",
+  "Specs listed for this catalog",
+];

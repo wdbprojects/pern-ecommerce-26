@@ -19,6 +19,7 @@ import LoginButton from "@/modules/components/auth/login-button";
 import { useEffect } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { Badge } from "@/components/ui/badge";
+import { routes } from "@/config/routes";
 
 interface ICartLine {
   line: {
@@ -89,7 +90,7 @@ const CartItems = ({
                     <h2>
                       {prod ? (
                         <Link
-                          href={`/product/${prod.slug}`}
+                          href={routes.productDetails(prod.slug)}
                           className={cn(
                             buttonVariants({ size: "sm", variant: "link" }),
                             "pl-0 text-lg",
